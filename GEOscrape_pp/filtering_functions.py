@@ -1,21 +1,24 @@
-import re
-import os
-import sys
-import numpy as np
-import pandas as pd
 # Command line should be in format: terms.txt tsvofscrape
 
-terms = sys.argv[1]
-data_frame = sys.argv[2]
+def open_geoscrape(geoscrape):
+    """
+    Open up a tab delimited GEOScrape for downstream filtering
+    """
+    # Pandas to open data frame of our listGEOData output
+    df = pd.read_csv(geoscrape, sep = "\t")
+    return(df)
 
-with open(terms, "r") as reader:
+def open_terms(terms):
+    """
+    Open up a \n delimited list of terms which you consider hits
+    """
+    with open(terms, "r") as reader:
     my_terms = reader.readlines()
+    return(my_terms)
 
-# Pandas to open data frame of our listGEOData output
-df = pd.read_csv(data_frame, sep = "\t")
+terms = sys.argv[1]
+geoscrape = sys.argv[2]
 
-# print(df[["Title", "Summary", "SampleTerms"]])
-# print(df.columns)
 
 # Get relevant data in a tuple c(title, summary, sampleterms)
 # for n_row in range ( len(df)) :
@@ -31,11 +34,10 @@ def yield_row(df):
         yield(row)
 
 
-
+def test1():
+    print("it works")
+    
 class searchable(object):
-
-
-
     def __init__(self, df_row, my_terms):
         self.GSE = df_row["Acc"]
         self.Title = df_row["Title"]
@@ -84,8 +86,6 @@ class searchable(object):
             new_terms.append(term)
         self.Terms = new_terms
         
-
-
     def test_title(self):
 
         for term in self.Terms:
@@ -119,8 +119,6 @@ class searchable(object):
             self.result = True
         else:
             self.result = False
-
-                
     def __str__(self):
         return "Test1"
 
@@ -158,16 +156,4 @@ def main(df, my_terms):
     # df_output.to_csv('Results_All.tsv', sep = "\t", header = True, index = False)
 
     df_merged.to_csv('Term_Related_GSEs.tsv', sep = "\t", header = True, index = False)
-
-         
-
-
-        # print(my_searchable.get_GSE(), my_searchable.get_searchable_hits())
-
-# main(df, my_terms)
-        
-test_frame = df.iloc[0:1000,:]
-# print(test_frame["Title"])a
-main(test_frame, my_terms)
-
 
