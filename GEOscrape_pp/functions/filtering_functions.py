@@ -16,9 +16,6 @@ def open_terms(terms):
     my_terms = reader.readlines()
     return(my_terms)
 
-terms = sys.argv[1]
-geoscrape = sys.argv[2]
-
 
 # Get relevant data in a tuple c(title, summary, sampleterms)
 # for n_row in range ( len(df)) :
