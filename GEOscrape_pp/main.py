@@ -16,15 +16,12 @@ click.option('-u','--username', required=True, help="GEMMA username")]
 
 @click.group()
 def cli():
-    print(f'{softwareName} =========================================== version: {version} initiating')
+    print(f'{softwareName} ============================================================================ version: {version} initiating')
 
-@cli.command("test")
+@cli.command("process")
 @add_options(credentials_option)
-def test(**kwargs):
-    print(kwargs)
+def process(**kwargs):
+    print("placeholder")
 
-@cli.command("test2")
-def test2():
-    print("test2")
 if __name__ == "__main__":
     cli()
