@@ -13,8 +13,8 @@ def open_terms(terms):
     Open up a \n delimited list of terms which you consider hits
     """
     with open(terms, "r") as reader:
-    my_terms = reader.readlines()
-    return(my_terms)
+        my_terms = reader.readlines()
+        return(my_terms)
 
 
 # Get relevant data in a tuple c(title, summary, sampleterms)
