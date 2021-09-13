@@ -1,9 +1,9 @@
 # Command line should be in format: terms.txt tsvofscrape
+import pandas as pd
 
 class Reader:
     def __init__(self) -> None:
         print("Initiating the reader")
-        import pandas as pd
 
     def pandas_read(file):
         """
