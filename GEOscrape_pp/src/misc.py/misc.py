@@ -19,3 +19,9 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
     # Print New Line on Complete
     if iteration == total: 
         print()
+
+# Helps format the time output into human readable form
+def formatTime(startTime, FinishedTime):
+    import time
+    return time.strftime("%H:%M:%S", time.gmtime(FinishedTime - startTime))
+    
