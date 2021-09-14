@@ -1,14 +1,16 @@
 import pandas as pd
 import re
 import time
-from misc.misc import printProgressBar, formatTime
+from misc.misc import formatTime
 from tqdm import tqdm
+
 class Filter:
     df = None
     ## Which column starts containing useful text, 12 for now
     text_index_start = 12
     ## Which column stops containing useful text, 15 for now
     text_index_stop = 15
+
     filterType = ""
     text_columns = None
 
@@ -30,6 +32,11 @@ class Filter:
         stop = time.time()
         print(f'Filtering {self.filterType} took {formatTime(start, stop)} seconds')
                 
+
+
+
+
+
 
     def _filterTerms(self, row, terms, failed_info):
         for column in self.text_columns:
