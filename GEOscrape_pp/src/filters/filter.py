@@ -1,5 +1,6 @@
 import pandas as pd
 import re
+import time
 class Filter:
     df = None
     ## Which column starts containing useful text, 12 for now
@@ -9,14 +10,17 @@ class Filter:
     filterType = ""
 
     def __init__(self, df, filterType) -> None:
-        pass
+        print(f'Initiaing {self.filterType} filter')
+        self.df = df
+        self.filterType = filterType
 
     def extractTextColumn(self):
         return self.df.iloc[:self.text_index_start, self.text_index_stop]
 
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?
     def filterTerms(self, terms, failed_info):
-        self.df['']
+        print(f"Filtering {self.filterType}")
+        self.df[self.filterType] = self.df
     
     ### Private implementation of filterTerms method
     def _filterTerms(self, terms, failed_info):
