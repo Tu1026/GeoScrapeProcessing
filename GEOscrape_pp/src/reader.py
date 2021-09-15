@@ -5,7 +5,7 @@ class Reader:
     def __init__(self) -> None:
         print("Initiating the reader")
 
-    def pandas_read(file):
+    def pandas_read(self,file):
         """
         Open up a tab delimited GEOScrape for downstream filtering
         """
@@ -13,7 +13,7 @@ class Reader:
         df = pd.read_csv(file, sep = "\t")
         return(df)
 
-    def open_terms(file):
+    def open_terms(self,file):
         """
         Open up a \n delimited list of terms which you consider hits
         """
