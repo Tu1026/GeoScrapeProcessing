@@ -1,3 +1,4 @@
+from typing import overload
 from .filter import Filter
 
 class SuperSeriesFilter(Filter):
@@ -10,12 +11,9 @@ class SuperSeriesFilter(Filter):
     def __init__(self, df) -> None:
         super().__init__(df, self.filterType)
     
-    ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?
+    ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api
     def filterTerms(self):
-        return super().filterTerms(self.regex_terms, self.failed_reason)
-    
-    def test(self):
-        print("test")
+        df = super().returnFrame()
+        super().df = df.loc[df["SuperSeries"] == False]
 
-    def __init__(self, df, filterType) -> None:
-        super().__init__(df, filterType)
+
