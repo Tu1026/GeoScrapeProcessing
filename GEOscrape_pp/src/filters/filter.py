@@ -50,7 +50,7 @@ class Filter:
         for column in self.text_columns:
             if not pd.isna(row[column]):
                 if re.search(terms, str(row[column]), re.IGNORECASE):
-                    return (f'{faileReason}')
-        return (f'{successReason}')
+                    return (f'(Failure) {faileReason}')
+        return (f'(Success) {successReason}')
     
     
