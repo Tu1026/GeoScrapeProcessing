@@ -1,3 +1,5 @@
+## This is a special filter. It does not share common methods with other filter objects because it does not rely on data
+
 from filters import Filter
 
 class nonCuratedPlatFilter(Filter):
