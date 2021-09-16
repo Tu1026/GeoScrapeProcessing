@@ -33,11 +33,11 @@ class Filter:
 
 
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?
-    def filterTerms(self, terms, failed_info):
+    def filterTerms(self, terms, failedReason, successReason):
         print(f"Filtering {self.filterType}")
         self.extractTextColumn()
         start = time.time()
-        self.df[self.resultColumn] = self.df.progress_apply(lambda row: self._filterTerms(row, terms,failed_info), axis=1)
+        self.df[self.resultColumn] = self.df.progress_apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
         stop = time.time()
         print(f'Filtering {self.filterType} took {formatTime(start, stop)} seconds')
 
@@ -46,11 +46,11 @@ class Filter:
         return self.df
 
     ### Private implementation of filterTerms
-    def _filterTerms(self, row, terms, failed_info):
+    def _filterTerms(self, row, terms, faileReason, successReason):
         for column in self.text_columns:
             if not pd.isna(row[column]):
                 if re.search(terms, str(row[column]), re.IGNORECASE):
-                    return (f'{failed_info}')
-        return ("Filtering Done")
+                    return (f'{faileReason}')
+        return (f'{successReason}')
     
     
