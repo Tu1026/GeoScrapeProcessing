@@ -13,7 +13,5 @@ class RNATypeFilter(Filter):
     
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?
     def filterTerms(self):
-        return super().filterTerms(self.regex_terms, self.failed_reason)
+        super().filterTerms(self.regex_terms, self.failed_reason)
     
-    def test(self):
-        print("test")
