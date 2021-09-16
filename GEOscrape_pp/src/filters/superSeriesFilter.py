@@ -4,7 +4,8 @@ from .filter import Filter
 
 class SuperSeriesFilter(Filter):
     ## The reason why something is filtered out at this stage
-    failed_reason = "Given Experiment is a superseries"
+    failedReason = "Given Experiment is a superseries"
+    successReason = "Experiments is a subseries"
     ## The regex terms not applicable here 
     regex_terms = "TRUE"
     filterType = "Superseries"
@@ -15,6 +16,6 @@ class SuperSeriesFilter(Filter):
     
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api
     def filterTerms(self):
-        super().filterTerms(self.regex_terms, self.failed_reason)
+        super().filterTerms(self.regex_terms, self.failedReason, self.successReason)
 
 
