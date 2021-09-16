@@ -1,5 +1,5 @@
 
-from .filter import Filter
+from filters import Filter
 
 class seqTypeFilter(Filter):
     ## The reasouperSerien why something is filtered out at this stage

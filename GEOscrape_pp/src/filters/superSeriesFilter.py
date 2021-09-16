@@ -1,6 +1,6 @@
 ## This is a hidden filter, output is not important because we simply just don't want superseries
 
-from .filter import Filter
+from filters import Filter
 
 class SuperSeriesFilter(Filter):
     ## The reason why something is filtered out at this stage
@@ -17,5 +17,4 @@ class SuperSeriesFilter(Filter):
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api
     def filterTerms(self):
         super().filterTerms(self.regex_terms, self.failedReason, self.successReason)
-
 
