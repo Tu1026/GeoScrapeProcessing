@@ -1,3 +1,4 @@
+### This is an abstract filter class for filers that rely on GEO output
 import pandas as pd
 import re
 import time
