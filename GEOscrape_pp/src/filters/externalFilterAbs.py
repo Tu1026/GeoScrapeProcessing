@@ -1,26 +1,25 @@
 ### This is an abstract filter class for filers that relies on some parsing from other services
 import pandas as pd
-import re
 import time
 from misc.misc import formatTime
 from tqdm import tqdm
 
-class Filter:
+class externalFilter:
     df = None
-    ## The relevantFields used by the type of filter
-    relevantFields = []
+    serviceClass = None
     filterType = ""
     text_columns = None
     resultColumn = ""
 
 
-    def __init__(self, df, filterType, relevantFields) -> None:
+    def __init__(self, df, filterType, relevantFields, serviceClass) -> None:
         print(f'Initiaing {self.filterType} filter')
         tqdm.pandas()
         self.df = df
         self.filterType = filterType
         self.relevantFields = relevantFields
         self.resultColumn = f'{self.filterType} Filter Results'
+        self.serviceClass = serviceClass
 
 
     def extractTextColumn(self):
@@ -50,6 +49,7 @@ class Filter:
     def _filterTerms(self, row, terms, faileReason, successReason):
         for column in self.text_columns:
             if not pd.isna(row[column]):
+                status = serviceClass
                 if re.search(terms, str(row[column]), re.IGNORECASE):
                     return (f'(Failure) {faileReason}')
         return (f'(Success) {successReason}')
