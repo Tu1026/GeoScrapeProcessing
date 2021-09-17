@@ -1,1 +1,1 @@
-import misc
+from .misc import formatTime
