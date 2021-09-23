@@ -1,8 +1,8 @@
 ## This is a special filter. It does not share common methods with other filter objects because it does not rely on data
 
-from filters import Filter
+from filters import InternalFilter
 
-class nonCuratedPlatFilter(Filter):
+class nonCuratedPlatFilter(InternalFilter):
     ## The reason why something is filtered out at this stage
     failedReason = "Given experiment uses platforms not already curated in GEMMA"
     ## Why experiemnt passed filter
