@@ -1,7 +1,7 @@
 from .internalFilterAbs import InternalFilter
 from config import Config
 
-class HitWordFilter(InternalFilter):
+class HitWordsFilter(InternalFilter):
     ## The reason why something is filtered out at this stage
     failedReason = "Given Experiment does not match the key word in the files"
     ## Why experiemnt passed filter
