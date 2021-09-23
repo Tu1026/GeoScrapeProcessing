@@ -2,9 +2,11 @@
 import pandas as pd
 import re
 import time
-from misc.misc import formatTime
+import swifter
+from ..misc import formatTime
 from tqdm import tqdm
 from abc import ABC, abstractclassmethod    
+
 
 class InternalFilter(ABC):
     df = None
@@ -39,7 +41,8 @@ class InternalFilter(ABC):
         print(f"Filtering {self.filterType}")
         self.extractTextColumn()
         start = time.time()
-        self.df[self.resultColumn] = self.df.progress_apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
+        #self.df[self.resultColumn] = self.df.progress_apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
+        self.df[self.resultColumn] = self.df.swifter.allow_dask_on_strings(enable=True).apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
         stop = time.time()
         print(f'Filtering {self.filterType} took {formatTime(start, stop)} seconds')
 
@@ -49,10 +52,20 @@ class InternalFilter(ABC):
 
     ### Private implementation of filterTerms
     def _filterTerms(self, row, terms, faileReason, successReason):
-        for column in self.text_columns:
-            if not pd.isna(row[column]):
-                if re.search(terms, str(row[column]), re.IGNORECASE):
-                    return (f'(Failure) {faileReason}')
-        return (f'(Success) {successReason}')
+        if type(terms) == list:
+            tempListOfWords = ""
+            for column in self.text_columns:
+                tempListOfWords.join(self.df[column].astype(str))
+            for term in terms:
+                if re.search(term, str(row[column]), re.IGNORECASE):
+                        return (f'(Failure) {faileReason}')
+            return (f'(Success) {successReason}')
+
+        elif type(terms) == str:
+            for column in self.text_columns:
+                if not pd.isna(row[column]):
+                    if re.search(terms, str(row[column]), re.IGNORECASE):
+                        return (f'(Failure) {faileReason}')
+            return (f'(Success) {successReason}')
     
     
