@@ -1,5 +1,5 @@
 
-from filters import InternalFilter
+from apps.filters import InternalFilter
 
 class seqTypeFilter(InternalFilter):
     ## The reasouperSerien why something is filtered out at this stage

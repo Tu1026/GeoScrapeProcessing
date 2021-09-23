@@ -1,6 +1,6 @@
 ## This is a special filter. It does not share common methods with other filter objects because it does not rely on data
 
-from filters import InternalFilter
+from apps.filters import InternalFilter
 
 class nonCuratedPlatFilter(InternalFilter):
     ## The reason why something is filtered out at this stage

@@ -1,8 +1,8 @@
 import click
 import pandas as pd
-from src import Reader
-from src.filters import RNATypeFilter
-from src.filters import HitWordFilter
+from apps import Reader
+from apps.filters import RNATypeFilter
+from apps.filters import HitWordFilter
 ##Builiding command line options. Cannot figure out how to modularize click options
 
 version = 0.01

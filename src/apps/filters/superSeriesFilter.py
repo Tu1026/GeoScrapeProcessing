@@ -1,6 +1,6 @@
 ## This is a hidden filter, output is not important because we simply just don't want superseries
 
-from filters import InternalFilter
+from apps.filters import InternalFilter
 
 class SuperSeriesFilter(InternalFilter):
     ## The reason why something is filtered out at this stage

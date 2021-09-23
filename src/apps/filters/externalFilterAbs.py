@@ -3,7 +3,7 @@ import pandas as pd
 import re
 import time
 
-from misc.misc import formatTime
+from apps.misc import formatTime
 from tqdm import tqdm
 from abc import ABC, abstractclassmethod
 
