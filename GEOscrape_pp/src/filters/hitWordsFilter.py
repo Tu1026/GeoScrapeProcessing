@@ -1,10 +1,11 @@
-from filters import Filter
+from filters import InternalFilter
 
-class RNATypeFilter(Filter):
+
+class hitWordFilter(InternalFilter):
     ## The reason why something is filtered out at this stage
-    failedReason = "Given Experiment does not use an RNA techonology supported"
+    failedReason = "Given Experiment does not match the key word in the files"
     ## Why experiemnt passed filter
-    successReason = "Supported RNA type"
+    successReason = "Experiment matches the key words given"
     ## The regex terms for unwanted hit terms
     regex_terms = "scRNA|single.cell.RNA|locRNA|lon.non.coding.rna|mirna|microRNA"
     filterType = "RNA"
