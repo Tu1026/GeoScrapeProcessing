@@ -1,5 +1,5 @@
-from apps.filters import InternalFilter
-from apps import Config
+from .internalFilterAbs import InternalFilter
+from config import Config
 
 class HitWordFilter(InternalFilter):
     ## The reason why something is filtered out at this stage
@@ -11,8 +11,11 @@ class HitWordFilter(InternalFilter):
     filterType = "RNA"
     relevantFileds = ['Title', 'Summary', 'MeSH', 'SampleTerms']
     
-    def __init__(self, df, path=Config.getHitTermsFile) -> None:
+    def __init__(self, df, path=Config.getHitTermsFile()) -> None:
+        print(path)
+        print("this was the path")
         super().__init__(df, self.filterType, self.relevantFileds)
+        print(path)
         with open(path, "r") as f:
             print("success")
     

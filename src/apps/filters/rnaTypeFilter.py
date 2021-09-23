@@ -1,4 +1,4 @@
-from apps.filters import InternalFilter
+from .internalFilterAbs import InternalFilter
 
 class RNATypeFilter(InternalFilter):
     ## The reason why something is filtered out at this stage
