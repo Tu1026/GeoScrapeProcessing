@@ -1,6 +1,6 @@
-from filters import Filter
+from filters import InternalFilter
 
-class RNATypeFilter(Filter):
+class RNATypeFilter(InternalFilter):
     ## The reason why something is filtered out at this stage
     failedReason = "Given Experiment does not use an RNA techonology supported"
     ## Why experiemnt passed filter
