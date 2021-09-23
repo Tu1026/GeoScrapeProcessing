@@ -4,8 +4,9 @@ import re
 import time
 from misc.misc import formatTime
 from tqdm import tqdm
+from abc import ABC, abstractclassmethod    
 
-class Filter:
+class InternalFilter(ABC):
     df = None
     ## The relevantFields used by the type of filter
     relevantFields = []
@@ -32,7 +33,7 @@ class Filter:
     def cleanColumns(self):
         self.df = self.df[self.df.iloc[:,1]!= '']
 
-
+    @abstractclassmethod
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?
     def filterTerms(self, terms, failedReason, successReason):
         print(f"Filtering {self.filterType}")
