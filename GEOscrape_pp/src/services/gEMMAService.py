@@ -19,7 +19,6 @@ class GEMMAService(Service):
 
     def returnServiceResults(self, gpl):
         super().returnServiceResults
-        except NotImplementedError:
-            url = f"https://gemma.msl.ubc.ca/rest/v2/datasets/{gpl}?offset=0&limit=20&sort=%2Bid"
-            return requests.get(url, headers=self.prePareHeader).json()
+        url = f"https://gemma.msl.ubc.ca/rest/v2/datasets/{gpl}?offset=0&limit=20&sort=%2Bid"
+        return requests.get(url, headers=self.prePareHeader).json()
     
