@@ -1,7 +1,7 @@
 
-from filters import Filter
+from filters import InternalFilter
 
-class seqTypeFilter(Filter):
+class seqTypeFilter(InternalFilter):
     ## The reasouperSerien why something is filtered out at this stage
     failedReason = "These experiments are array experiements that don't to be on RNA-seq pipeline"
     successReason = "These are RNA-seq experiments that need to be in the pipeline"

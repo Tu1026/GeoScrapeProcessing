@@ -1,8 +1,8 @@
 ## This is a hidden filter, output is not important because we simply just don't want superseries
 
-from filters import Filter
+from filters import InternalFilter
 
-class SuperSeriesFilter(Filter):
+class SuperSeriesFilter(InternalFilter):
     ## The reason why something is filtered out at this stage
     failedReason = "Given Experiment is a superseries"
     successReason = "Experiments is a subseries"
