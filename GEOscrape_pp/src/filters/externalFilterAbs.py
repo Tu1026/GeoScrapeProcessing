@@ -1,10 +1,13 @@
 ### This is an abstract filter class for filers that relies on some parsing from other services
 import pandas as pd
+import re
 import time
+
 from misc.misc import formatTime
 from tqdm import tqdm
+from abc import ABC, abstractclassmethod
 
-class externalFilter:
+class ExternalFilter(ABC):
     df = None
     serviceClass = None
     filterType = ""
@@ -31,7 +34,7 @@ class externalFilter:
     def cleanColumns(self):
         self.df = self.df[self.df.iloc[:,1]!= '']
 
-
+    @abstractclassmethod
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?
     def filterTerms(self, terms, failedReason, successReason):
         print(f"Filtering {self.filterType}")
@@ -49,7 +52,7 @@ class externalFilter:
     def _filterTerms(self, row, terms, faileReason, successReason):
         for column in self.text_columns:
             if not pd.isna(row[column]):
-                status = serviceClass
+                status = self.serviceClass
                 if re.search(terms, str(row[column]), re.IGNORECASE):
                     return (f'(Failure) {faileReason}')
         return (f'(Success) {successReason}')
