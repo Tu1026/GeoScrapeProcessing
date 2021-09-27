@@ -4,13 +4,13 @@ from .internalFilterAbs import InternalFilter
 
 class NonCuratedPlatFilter(InternalFilter):
     ## The reason why something is filtered out at this stage
-    failedReason = "Given experiment uses platforms not already curated in GEMMA"
+    failedReason = "Platform is not already curated and in GEMMA, please double check and make sure this platform can be added"
     ## Why experiemnt passed filter
-    successReason = "Supported RNA type"
+    successReason = "Platform(s) the experiment uses is/are all in GEMMA already"
     ## The regex terms for unwanted hit terms
-    regex_terms = "scRNA|single.cell.RNA|locRNA|lon.non.coding.rna|mirna|microRNA"
-    filterType = "RNA"
-    relevantFileds = ['Title', 'Summary', 'MeSH', 'SampleTerms']
+    regex_terms = "FALSE"
+    filterType = "nonCuratedPlatofrms"
+    relevantFileds = ['AllPlatformsInGemma']
     
     def __init__(self) -> None:
         super().__init__(self.filterType, self.relevantFileds)
