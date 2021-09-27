@@ -1,3 +1,3 @@
-print("Importing", __name__)
-from .filters import RNATypeFilter
-from readAndWriter import Reader
+from apps.readAndWriter import Reader
+import sys
+from config import Config
