@@ -8,6 +8,7 @@ from tqdm import tqdm
 from abc import ABC, abstractclassmethod
 
 class ExternalFilter(ABC):
+    df = None
     serviceClass = None
     filterType = ""
     text_columns = None
