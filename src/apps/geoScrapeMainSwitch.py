@@ -10,7 +10,7 @@ class GeoScrapeMainSwitch:
     resultsFrame =None
     outPutFileDir = ""
     sep = ""
-    listOfFilters = [ExternalFilter, HitWordsFilter, InternalFilter, NonCuratedPlatFilter, RNATypeFilter,
+    listOfFilters = [HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter,
     SeqTypeFilter, SuperSeriesFilter]
 
     def __init__(self, inputFileLocation, outPutFileDir, hitWordsFileLoc, sep) -> None:
@@ -34,7 +34,7 @@ class GeoScrapeMainSwitch:
         return initializedFilters
 
     def _runFilters(self):
-        filters = self.initalizeFilters
+        filters = self._initalizeFilters()
         print("Start running the file on all filters............................")
         for filter in filters:
             self.resultsFrame = filter.filterTerms(self.resultsFrame)
