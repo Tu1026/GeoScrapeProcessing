@@ -1,6 +1,5 @@
 from apps.filters import *
 from apps.readAndWriter import Reader, Writer
-
 class GeoScrapeMainSwitch:
     hitWordsFileLoc = ""
     geoScrapeFrame = None
@@ -36,4 +35,3 @@ class GeoScrapeMainSwitch:
         print("Start running the file on all filters............................")
         for filter in filters:
             self.resultsFrame = filter.filterTerms(self.resultsFrame)
-        
