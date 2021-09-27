@@ -55,7 +55,7 @@ class InternalFilter(ABC):
             for column in self.text_columns:
                 tempListOfWords = tempListOfWords + row[column].astype(str)
             for term in terms:
-                if re.search(terms, tempListOfWords, re.IGNORECASE):
+                if re.search(term, tempListOfWords, re.IGNORECASE):
                     return (f'(Failure) {faileReason}')
             return (f'(Success) {successReason}')
 
