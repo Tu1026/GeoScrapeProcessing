@@ -30,6 +30,10 @@ def cli():
 def process(**kwargs):
     print("placeholder")
 
+
+
+#/* Currently only using basic regex matching for file output from geoScrape command line. Could improve using Sphinx, SQL fulltext search,
+# or elastic search for hitTemrs */
 @cli.command("geoScrape")
 @add_options(geoScrape_option)
 def geoScrape(**kawargs):
