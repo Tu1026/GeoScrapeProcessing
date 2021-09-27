@@ -8,4 +8,8 @@ class Writer:
     def writeToCsv(resultsFrame, sep, outPutDir):
         print(f"Outputing the file in your selected location at {outPutDir}")
         currTime = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
-        resultsFrame.to_csv(os.path.join(outPutDir,f"Processed_GeoSrape_{currTime}"), sep = sep, index=False)
+        if sep == "\t":
+            format="tsv"
+        else:
+            format="csv"
+        resultsFrame.to_csv(os.path.join(outPutDir,f"Processed_GeoSrape_{currTime}.{format}"), sep = sep, index=False)
