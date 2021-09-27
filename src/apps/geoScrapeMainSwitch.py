@@ -1,7 +1,5 @@
 from apps.filters import *
-from apps.readAndWriter import Reader
-from datetime import datetime
-import os
+from apps.readAndWriter import Reader, Writer
 
 class GeoScrapeMainSwitch:
     hitWordsFileLoc = ""
@@ -23,7 +21,7 @@ class GeoScrapeMainSwitch:
 
     def filterAndOutputFile(self):
         self._runFilters()
-        self._outPutFile()
+        Writer.writeToCsv(self.resultsFrame, self.sep, self.outPutFileDir)
         
 
     def _initalizeFilters(self):
@@ -39,7 +37,3 @@ class GeoScrapeMainSwitch:
         for filter in filters:
             self.resultsFrame = filter.filterTerms(self.resultsFrame)
         
-    def _outPutFile(self):
-        print(f"Outputing the file in your selected location at {self.outPutFileDir}")
-        currTime = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
-        self.resultsFrame.to_csv(os.path.join(self.outPutFileDir,f"Processed_GeoSrape_{currTime}", sep = self.sep))
