@@ -28,12 +28,16 @@ class InternalFilter(ABC):
     def extractTextColumn(self, df):
         df = self.cleanColumns(df)
         print(f"Getting text from output column {self.relevantFields}. Please make sure they are correct")
-        self.text_columns = df.iloc[df.columns & self.relevantFields]
+        self.text_columns = df[df.columns & self.relevantFields]
         return df
 
     def cleanColumns(self, df):
-        #print(df[df.iloc[:,1]!= ''])
         df = df[df.iloc[:,1]!= '']
+        print(f"Please check if the below dataframe looks correct before filtering by {self.filterType}")
+        print("\n\n ========================================These are the first 5 rows ========================================")
+        print(df.head())
+        print("\n\n ========================================These are the last 5 rows========================================")
+        print(df.tail())
         return df
 
 
@@ -46,7 +50,8 @@ class InternalFilter(ABC):
         #df[self.resultColumn] = df.progress_apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
         df[self.resultColumn] = df.swifter.allow_dask_on_strings(enable=True).apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
         stop = time.time()
-        print(f'Filtering {self.filterType} took {formatTime(start, stop)} seconds')
+        print(f'Filtering {self.filterType} took {formatTime(start, stop)} seconds') 
+        print(df.head())
         return df
 
 
@@ -55,7 +60,8 @@ class InternalFilter(ABC):
         if self.filterType == "hitWords":
             tempListOfWords = ""
             for column in self.text_columns:
-                tempListOfWords = tempListOfWords + row[column].astype(str)
+                if not pd.isna(row[column]):
+                    tempListOfWords = tempListOfWords + row[column]
             for term in terms:
                 if re.search(term, tempListOfWords, re.IGNORECASE):
                     return (f'(Failure) {faileReason}')
