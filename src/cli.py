@@ -1,6 +1,8 @@
 from config import Config
 import click
 from apps.geoScrapeMainSwitch import GeoScrapeMainSwitch
+import time
+from apps.misc import formatTime
 ##Builiding command line options. Cannot figure out how to modularize click options
 
 version = 0.5
@@ -37,6 +39,7 @@ def process(**kwargs):
 @cli.command("geoScrape")
 @add_options(geoScrape_option)
 def geoScrape(**kawargs):
+    startTime = time.time()
     print("Running with the options and value")
     for key, value in kawargs.items():
         if key == "sep":
@@ -44,6 +47,8 @@ def geoScrape(**kawargs):
         print(f"--{key}:{value} ")
     geoScrapeSwitch = GeoScrapeMainSwitch(kawargs["file"], kawargs["outputdir"], kawargs["hitwordsfile"], kawargs["sep"])
     geoScrapeSwitch.filterAndOutputFile()
+    endTime = time.time()
+    print(f'Execution took {formatTime(startTime, endTime)}')
 
 if __name__ == "__main__":
     print('\n')
