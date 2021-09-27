@@ -63,15 +63,19 @@ class InternalFilter(ABC):
                 if not pd.isna(row[column]):
                     tempListOfWords = tempListOfWords + row[column]
             for term in terms:
+                ## Sucess if a term is present in the text
                 if re.search(term, tempListOfWords, re.IGNORECASE):
-                    return (f'(Failure) {faileReason}')
-            return (f'(Success) {successReason}')
+                    return (f'(Success) {successReason}')
+            ## Failure if the no terms are in the text at all
+            return (f'(Failure) {faileReason}')
 
         else:
             for column in self.text_columns:
                 if not pd.isna(row[column]):
+                    ## Failure if the term we don't want is in the text
                     if re.search(terms, str(row[column]), re.IGNORECASE):
                         return (f'(Failure) {faileReason}')
+            ## Sucess if the term we don't want doesn't appear
             return (f'(Success) {successReason}')
     
     
