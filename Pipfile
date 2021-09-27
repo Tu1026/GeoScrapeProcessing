@@ -12,6 +12,7 @@ six = "==1.16.0"
 click = "*"
 tqdm = "*"
 requests = "*"
+swifter = "*"
 
 [dev-packages]
 
