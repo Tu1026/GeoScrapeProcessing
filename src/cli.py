@@ -5,6 +5,11 @@ import time
 from apps.misc import formatTime
 ##Builiding command line options. Cannot figure out how to modularize click options
 
+import os
+##Have to limit thread usage because frink blocks too many
+os.environ['OPENBLAS_NUM_THREADS'] = "1"
+
+
 version = 0.5
 softwareName = "Post GEO Filter"
 ###Build Options
