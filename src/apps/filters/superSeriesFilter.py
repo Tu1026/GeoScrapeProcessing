@@ -16,5 +16,5 @@ class SuperSeriesFilter(InternalFilter):
     
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api
     def filterTerms(self, df):
-        super().filterTerms(df, self.regex_terms, self.failedReason, self.successReason)
+        return super().filterTerms(df, self.regex_terms, self.failedReason, self.successReason)
 
