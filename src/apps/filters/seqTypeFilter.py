@@ -7,7 +7,7 @@ class SeqTypeFilter(InternalFilter):
     successReason = "These are RNA-seq experiments that need to be in the pipeline"
     ## The regex terms for unwanted hit terms
     regex_terms = "array"
-    filterType = "Superseries"
+    filterType = "Sequencing Type"
     relevantFields = ["Type"]
     
     def __init__(self) -> None:
