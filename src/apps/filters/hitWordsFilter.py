@@ -14,7 +14,6 @@ class HitWordsFilter(InternalFilter):
     
     def __init__(self, path=Config.getHitTermsFile()) -> None:
         super().__init__(self.filterType, self.relevantFileds)
-        self.regexTerms()
     
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?
     def filterTerms(self, df):
