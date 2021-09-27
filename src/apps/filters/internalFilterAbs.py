@@ -17,51 +17,49 @@ class InternalFilter(ABC):
     resultColumn = ""
 
 
-    def __init__(self, df, filterType, relevantFields) -> None:
+    def __init__(self, filterType, relevantFields) -> None:
         print(f'Initiaing {self.filterType} filter')
         tqdm.pandas()
-        self.df = df
         self.filterType = filterType
         self.relevantFields = relevantFields
         self.resultColumn = f'{self.filterType} Filter Results'
 
 
-    def extractTextColumn(self):
-        self.cleanColumns()
+    def extractTextColumn(self, df):
+        df = self.cleanColumns(df)
         print(f"Getting text from output column {self.relevantFields}. Please make sure they are correct")
-        self.text_columns = self.df.iloc[self.df.columns & self.relevantFields]
+        self.text_columns = df.iloc[df.columns & self.relevantFields]
     
 
-    def cleanColumns(self):
-        self.df = self.df[self.df.iloc[:,1]!= '']
+    def cleanColumns(self, df):
+        df = df[df.iloc[:,1]!= '']
+        return df
 
     @abstractclassmethod
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?
-    def filterTerms(self, terms, failedReason, successReason):
+    def filterTerms(self, df, terms, failedReason, successReason):
         print(f"Filtering {self.filterType}")
-        self.extractTextColumn()
+        self.extractTextColumn(df)
         start = time.time()
-        #self.df[self.resultColumn] = self.df.progress_apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
-        self.df[self.resultColumn] = self.df.swifter.allow_dask_on_strings(enable=True).apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
+        #df[self.resultColumn] = df.progress_apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
+        df[self.resultColumn] = df.swifter.allow_dask_on_strings(enable=True).apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
         stop = time.time()
         print(f'Filtering {self.filterType} took {formatTime(start, stop)} seconds')
+        return df
 
-
-    def returnFrame(self):
-        return self.df
 
     ### Private implementation of filterTerms
     def _filterTerms(self, row, terms, faileReason, successReason):
-        if type(terms) == list:
+        if self.filterType == "hitWords":
             tempListOfWords = ""
             for column in self.text_columns:
-                tempListOfWords.join(self.df[column].astype(str))
+                tempListOfWords = tempListOfWords + row[column].astype(str)
             for term in terms:
-                if re.search(term, str(row[column]), re.IGNORECASE):
-                        return (f'(Failure) {faileReason}')
+                if re.search(terms, tempListOfWords, re.IGNORECASE):
+                    return (f'(Failure) {faileReason}')
             return (f'(Success) {successReason}')
 
-        elif type(terms) == str:
+        else:
             for column in self.text_columns:
                 if not pd.isna(row[column]):
                     if re.search(terms, str(row[column]), re.IGNORECASE):

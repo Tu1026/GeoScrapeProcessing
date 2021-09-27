@@ -2,7 +2,7 @@
 
 from .internalFilterAbs import InternalFilter
 
-class nonCuratedPlatFilter(InternalFilter):
+class NonCuratedPlatFilter(InternalFilter):
     ## The reason why something is filtered out at this stage
     failedReason = "Given experiment uses platforms not already curated in GEMMA"
     ## Why experiemnt passed filter
@@ -12,10 +12,10 @@ class nonCuratedPlatFilter(InternalFilter):
     filterType = "RNA"
     relevantFileds = ['Title', 'Summary', 'MeSH', 'SampleTerms']
     
-    def __init__(self, df) -> None:
-        super().__init__(df, self.filterType, self.relevantFileds)
+    def __init__(self) -> None:
+        super().__init__(self.filterType, self.relevantFileds)
     
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?
-    def filterTerms(self):
-        super().filterTerms(self.regex_terms, self.failedReason, self.successReason)
+    def filterTerms(self, df):
+        super().filterTerms(df, self.regex_terms, self.failedReason, self.successReason)
     

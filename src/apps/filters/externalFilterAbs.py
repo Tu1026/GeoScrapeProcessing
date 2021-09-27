@@ -8,12 +8,10 @@ from tqdm import tqdm
 from abc import ABC, abstractclassmethod
 
 class ExternalFilter(ABC):
-    df = None
     serviceClass = None
     filterType = ""
     text_columns = None
     resultColumn = ""
-
 
     def __init__(self, df, filterType, relevantFields, serviceClass) -> None:
         print(f'Initiaing {self.filterType} filter')
@@ -33,6 +31,7 @@ class ExternalFilter(ABC):
 
     def cleanColumns(self):
         self.df = self.df[self.df.iloc[:,1]!= '']
+
 
     @abstractclassmethod
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?

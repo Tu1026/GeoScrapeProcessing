@@ -1,5 +1,6 @@
 from .internalFilterAbs import InternalFilter
 from config import Config
+from apps.readAndWriter import Reader
 
 class HitWordsFilter(InternalFilter):
     ## The reason why something is filtered out at this stage
@@ -7,18 +8,14 @@ class HitWordsFilter(InternalFilter):
     ## Why experiemnt passed filter
     successReason = "Experiment matches the key words given"
     ## The regex terms for unwanted hit terms
-    regex_terms = ""
-    filterType = "RNA"
+    regexTerms = Reader.read_terms(Config.getHitTermsFile())
+    filterType = "hitWords"
     relevantFileds = ['Title', 'Summary', 'MeSH', 'SampleTerms']
     
-    def __init__(self, df, path=Config.getHitTermsFile()) -> None:
-        print(path)
-        print("this was the path")
-        super().__init__(df, self.filterType, self.relevantFileds)
-        print(path)
-        with open(path, "r") as f:
-            print("success")
+    def __init__(self, path=Config.getHitTermsFile()) -> None:
+        super().__init__(self.filterType, self.relevantFileds)
+        self.regexTerms()
     
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?
-    def filterTerms(self):
-        super().filterTerms(self.regex_terms, self.failedReason, self.successReason)
+    def filterTerms(self, df):
+        super().filterTerms(self.regexTerms, self.failedReason, self.successReason)
