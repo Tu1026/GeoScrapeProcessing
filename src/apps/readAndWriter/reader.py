@@ -12,7 +12,7 @@ class Reader:
         df = pd.read_csv(file, sep=sep)
         return(df)
     @staticmethod
-    def open_terms(file):
+    def read_terms(file):
         """
         Open up a \n delimited list of terms which you consider hits
         """
