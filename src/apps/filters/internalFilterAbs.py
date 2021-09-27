@@ -5,7 +5,7 @@ import time
 import swifter
 from apps.misc import formatTime
 from tqdm import tqdm
-from abc import ABC, abstractclassmethod    
+from abc import ABC, abstractmethod 
 
 
 class InternalFilter(ABC):
@@ -29,17 +29,19 @@ class InternalFilter(ABC):
         df = self.cleanColumns(df)
         print(f"Getting text from output column {self.relevantFields}. Please make sure they are correct")
         self.text_columns = df.iloc[df.columns & self.relevantFields]
-    
+        return df
 
     def cleanColumns(self, df):
+        #print(df[df.iloc[:,1]!= ''])
         df = df[df.iloc[:,1]!= '']
         return df
 
-    @abstractclassmethod
+
+    @abstractmethod
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?
     def filterTerms(self, df, terms, failedReason, successReason):
         print(f"Filtering {self.filterType}")
-        self.extractTextColumn(df)
+        df = self.extractTextColumn(df)
         start = time.time()
         #df[self.resultColumn] = df.progress_apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
         df[self.resultColumn] = df.swifter.allow_dask_on_strings(enable=True).apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
