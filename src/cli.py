@@ -1,3 +1,4 @@
+from requests.sessions import default_headers
 from config import Config
 import click
 from apps.geoScrapeMainSwitch import GeoScrapeMainSwitch
@@ -22,10 +23,11 @@ def add_options(options):
 credentials_option = [click.option('-p','--password', help="GEMMA password"), 
 click.option('-u','--username', required=True, help="GEMMA username")]
 
-geoScrape_option = [click.option('-f', '--file', required=True, help="File that contains the GEOScrape"),
-click.option('-o', '--outPutDir', default=Config.getOutPutDir(),help="Directory where you want to output the processed GEOscrape. Default at /docs/output_files"),
+geoScrape_option = [click.option('-f', '--file', help="File that contains the GEOScrape, if -g is used this is ignored"),
+click.option('-o', '--outPutDir', default=Config.getOutPutDir(),help="Directory where you want to output the processed GEOscrape. Default at /docs/output_files, if -g is used this is ignored"),
 click.option('-s', '--sep', default="\t", help="Delimiter you want to use for the input and output file"),
-click.option('-h', '--hitWordsFile', default= Config.getHitTermsFile(), help = "Location of the hitTerms file. Default at docs/input_files/terms.txt")]
+click.option('-h', '--hitWordsFile', default= Config.getHitTermsFile(), help = "Location of the hitTerms file. Default at docs/input_files/terms.txt"),
+click.option('-g', '--google', default="", help = "Enter the url of your google spreadsheet if you want to read and write your results to google sheets")]
 
 @click.group()
 def cli():
@@ -43,6 +45,9 @@ def process(**kwargs):
 @cli.command("geoScrape")
 @add_options(geoScrape_option)
 def geoScrape(**kawargs):
+    if not kawargs['file'] and not kawargs['google']:
+        exit("You need to at least use one of the -f or -g flag")
+        
     startTime = time.time()
     print("Running with the options and value")
     for key, value in kawargs.items():
@@ -50,7 +55,7 @@ def geoScrape(**kawargs):
             value = f"{value}"
         print(f"--{key}:{value} ")
     geoScrapeSwitch = GeoScrapeMainSwitch(kawargs["file"], kawargs["outputdir"], kawargs["hitwordsfile"], kawargs["sep"])
-    geoScrapeSwitch.filterAndOutputFile()
+    geoScrapeSwitch.filterAndOutputFile(kawargs["google"])
     endTime = time.time()
     print(f'Execution took {formatTime(startTime, endTime)}')
 
