@@ -1,10 +1,10 @@
 from datetime import datetime
 import os
-from services import GoogleSheetsService
+from apps.services import GoogleSheetsService
 class Writer:
 
     @staticmethod
-    def writeGEOScrapeToCsvs(resultsFrame, origFrame, sep, outPutDir, google, url):
+    def writeGEOScrapeToCsvs(resultsFrame, origFrame, sep, outPutDir, google):
         print(f"Outputing the file in your selected location at {outPutDir}")
         currTime = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
         nameForAllFrame = "Processed_GeoSrape_mainFrame" 
@@ -16,7 +16,7 @@ class Writer:
         nameForUnwantedFrame ="(Disgarded Experiments) Processed_GeoSrape_mainFrame"
 
         if google:
-            gService = GoogleSheetsService(url)
+            gService = GoogleSheetsService(google)
             gService.createNewWorkSheetFromDf(nameForAllFrame, resultsFrame)
             gService.createNewWorkSheetFromDf(nameForOnePlarformCuratableFrameArray, OutputSheetsFormatting.filterOnePlarformCuratableFrameArray(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForOnePlarformCuratableFrameRNA, OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame))
