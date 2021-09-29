@@ -7,8 +7,7 @@ class GeoScrapeMainSwitch:
     resultsFrame =None
     outPutFileDir = ""
     sep = ""
-    listOfFilters = [HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter,
-    SeqTypeFilter, SuperSeriesFilter]
+    listOfFilters = [HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter, SuperSeriesFilter]
 
     def __init__(self, inputFileLocation, outPutFileDir, hitWordsFileLoc, sep) -> None:
         self.hitWordsFileLoc = hitWordsFileLoc
@@ -20,7 +19,7 @@ class GeoScrapeMainSwitch:
 
     def filterAndOutputFile(self):
         self._runFilters()
-        Writer.writeToCsv(self.resultsFrame, self.sep, self.outPutFileDir)
+        Writer.writeGEOScrapeToCsvs(self.resultsFrame, self.geoScrapeFrame, self.sep, self.outPutFileDir)
         
 
     def _initalizeFilters(self):
