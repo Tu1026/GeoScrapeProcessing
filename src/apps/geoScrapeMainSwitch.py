@@ -17,9 +17,9 @@ class GeoScrapeMainSwitch:
         self.outPutFileDir = outPutFileDir
     
 
-    def filterAndOutputFile(self):
+    def filterAndOutputFile(self, google):
         self._runFilters()
-        Writer.writeGEOScrapeToCsvs(self.resultsFrame, self.geoScrapeFrame, self.sep, self.outPutFileDir)
+        Writer.writeGEOScrapeToCsvs(self.resultsFrame, self.geoScrapeFrame, self.sep, self.outPutFileDir, google)
         
 
     def _initalizeFilters(self):
