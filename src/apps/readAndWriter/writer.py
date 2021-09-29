@@ -1,25 +1,45 @@
 from datetime import datetime
 import os
-import re
+from services import GoogleSheetsService
 class Writer:
 
     @staticmethod
-    def writeGEOScrapeToCsvs(resultsFrame, origFrame, sep, outPutDir):
+    def writeGEOScrapeToCsvs(resultsFrame, origFrame, sep, outPutDir, google, url):
         print(f"Outputing the file in your selected location at {outPutDir}")
         currTime = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
-        if sep == "\t":
-            format="tsv"
-        else:
-            format="csv"
-        ## Write main frame
-        os.mkdir(os.path.join(outPutDir,currTime))
-        resultsFrame.to_csv(os.path.join(outPutDir,f"{currTime}/Processed_GeoSrape_mainFrame.{format}"), sep = sep, index=False)
-        OutputSheetsFormatting.filterOnePlarformCuratableFrameArray(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/(1.Ready for loading Arrays) Processed_GeoSrape_mainFrame.{format}"), sep = sep, index=False)
-        OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/(2.Ready for loading RNA-seq) Processed_GeoSrape_mainFrame.{format}"), sep = sep, index=False)
-        OutputSheetsFormatting.filterMultiArrayPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/(3. Check if you need to split platforms Arrays) Processed_GeoSrape_mainFrame.{format}"), sep = sep, index=False)
-        OutputSheetsFormatting.filterMultiRNASeqPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/(4. Check if you need to split platforms RNA-seq) Processed_GeoSrape_mainFrame.{format}"), sep = sep, index=False)
-        OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/(5. Check if all platforms can be curated) Processed_GeoSrape_mainFrame.{format}"), sep = sep, index=False)
-        OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/(Disgarded Experiments) Processed_GeoSrape_mainFrame.{format}"), sep = sep, index=False)
+        nameForAllFrame = "Processed_GeoSrape_mainFrame" 
+        nameForOnePlarformCuratableFrameArray = "(1.Ready for loading Arrays) Processed_GeoSrape_mainFrame" 
+        nameForOnePlarformCuratableFrameRNA =  "(2.Ready for loading RNA-seq) Processed_GeoSrape_mainFrame"
+        nameForMultiPlarformCuratableFrameArray = "(3. Check if you need to split platforms Arrays) Processed_GeoSrape_mainFrame"
+        nameForMultiPlarformCuratableFrameRNA = "(4. Check if you need to split platforms RNA-seq) Processed_GeoSrape_mainFrame"
+        nameForNonCuratedPlaform ="(5. Check if all platforms can be curated) Processed_GeoSrape_mainFrame" 
+        nameForUnwantedFrame ="(Disgarded Experiments) Processed_GeoSrape_mainFrame"
+
+        if google:
+            gService = GoogleSheetsService(url)
+            gService.createNewWorkSheetFromDf(nameForAllFrame, resultsFrame)
+            gService.createNewWorkSheetFromDf(nameForOnePlarformCuratableFrameArray, OutputSheetsFormatting.filterOnePlarformCuratableFrameArray(origFrame, resultsFrame))
+            gService.createNewWorkSheetFromDf(nameForOnePlarformCuratableFrameRNA, OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame))
+            gService.createNewWorkSheetFromDf(nameForMultiPlarformCuratableFrameArray, OutputSheetsFormatting.filterMultiArrayPlarformCuratableFrame(origFrame, resultsFrame))
+            gService.createNewWorkSheetFromDf(nameForMultiPlarformCuratableFrameRNA, OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame))
+            gService.createNewWorkSheetFromDf(nameForNonCuratedPlaform, OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame))
+            gService.createNewWorkSheetFromDf(nameForUnwantedFrame, OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame))
+
+
+        elif not google:
+            if sep == "\t":
+                format="tsv"
+            else:
+                format="csv"
+            ## Write main frame
+            os.mkdir(os.path.join(outPutDir,currTime))
+            resultsFrame.to_csv(os.path.join(outPutDir,f"{currTime}/{nameForAllFrame}.{format}"), sep = sep, index=False)
+            OutputSheetsFormatting.filterOnePlarformCuratableFrameArray(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForOnePlarformCuratableFrameArray}.{format}"), sep = sep, index=False)
+            OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForOnePlarformCuratableFrameRNA}.{format}"), sep = sep, index=False)
+            OutputSheetsFormatting.filterMultiArrayPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForMultiPlarformCuratableFrameArray}.{format}"), sep = sep, index=False)
+            OutputSheetsFormatting.filterMultiRNASeqPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForMultiPlarformCuratableFrameRNA}.{format}"), sep = sep, index=False)
+            OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForNonCuratedPlaform}.{format}"), sep = sep, index=False)
+            OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForUnwantedFrame}.{format}"), sep = sep, index=False)
 
 
 
