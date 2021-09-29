@@ -4,7 +4,7 @@ from apps.services import GoogleSheetsService
 class Writer:
 
     @staticmethod
-    def writeGEOScrapeToCsvs(resultsFrame, origFrame, sep, outPutDir, google):
+    def writeGEOScrapeToCsvs(resultsFrame, origFrame, sep, outPutDir, gService):
         print(f"Outputing the file in your selected location at {outPutDir}")
         currTime = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
         nameForAllFrame = "Processed_GeoSrape_mainFrame" 
@@ -15,8 +15,7 @@ class Writer:
         nameForNonCuratedPlaform ="(5. Check if all platforms can be curated) Processed_GeoSrape_mainFrame" 
         nameForUnwantedFrame ="(Disgarded Experiments) Processed_GeoSrape_mainFrame"
 
-        if google:
-            gService = GoogleSheetsService(google)
+        if gService:
             gService.createNewWorkSheetFromDf(nameForAllFrame, resultsFrame)
             gService.createNewWorkSheetFromDf(nameForOnePlarformCuratableFrameArray, OutputSheetsFormatting.filterOnePlarformCuratableFrameArray(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForOnePlarformCuratableFrameRNA, OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame))
@@ -26,7 +25,7 @@ class Writer:
             gService.createNewWorkSheetFromDf(nameForUnwantedFrame, OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame))
 
 
-        elif not google:
+        elif not gService:
             if sep == "\t":
                 format="tsv"
             else:
