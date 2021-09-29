@@ -1,6 +1,6 @@
 import requests
 import base64
-from services import Service
+from apps.services import Service
 
 class GEMMAService(Service):
     usename = ""
