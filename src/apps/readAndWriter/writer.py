@@ -1,15 +1,43 @@
-import pandas as pd
 from datetime import datetime
 import os
 class Writer:
-    
 
     @staticmethod
-    def writeToCsv(resultsFrame, sep, outPutDir):
+    def writeGEOScrapeToCsvs(resultsFrame, origFrame, sep, outPutDir):
         print(f"Outputing the file in your selected location at {outPutDir}")
         currTime = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
         if sep == "\t":
             format="tsv"
         else:
             format="csv"
-        resultsFrame.to_csv(os.path.join(outPutDir,f"Processed_GeoSrape_{currTime}.{format}"), sep = sep, index=False)
+        ## Write main frame
+        resultsFrame.to_csv(os.path.join(outPutDir,f"/{currTime}Processed_GeoSrape_mainFrame.{format}"), sep = sep, index=False)
+
+        ## Get all the ones ready for curation
+        diffColumns = resultsFrame.columns.difference(origFrame.columns)
+        for column in diffColumns:
+            if 
+
+
+class OutputSheetsFormatting:
+    @staticmethod
+    def filterMainCuratableFrame(origDf, newDf):
+        pass
+
+    @staticmethod
+    def hitWordsGroupingFrame(origDf, newDf):
+        pass
+
+    @staticmethod
+    def groupByHitWordsFrame(origDf, newDf):
+        pass
+
+    @staticmethod
+    def nonCuratedPlatFormFrame(origDf, newDf):
+        pass
+
+    @staticmethod
+    def unwantedFrame(origDf, newDf):
+        pass
+    
+     
