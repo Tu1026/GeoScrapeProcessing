@@ -3,15 +3,14 @@ import click
 from apps.geoScrapeMainSwitch import GeoScrapeMainSwitch
 import time
 from apps.misc import formatTime
+
+
 ##Builiding command line options. Cannot figure out how to modularize click options
 
-import os
+
 ##Have to limit thread usage because frink blocks too many
-os.environ['OPENBLAS_NUM_THREADS'] = "1"
+Config.setThreads()
 
-
-version = 0.5
-softwareName = "Post GEO Filter"
 ###Build Options
 def add_options(options):
     def _add_options(func):
@@ -57,7 +56,7 @@ def geoScrape(**kawargs):
 
 if __name__ == "__main__":
     print('\n')
-    print(f'                                         {softwareName} version: {version} initiating')
+    print(f'                                         {Config.getSoftwareName()} version: {Config.getVersion()} initiating')
     print("=================================================================================================================================")
     print('\n')
     cli()
