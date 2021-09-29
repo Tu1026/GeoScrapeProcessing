@@ -27,7 +27,7 @@ geoScrape_option = [click.option('-f', '--file', help="File that contains the GE
 click.option('-o', '--outPutDir', default=Config.getOutPutDir(),help="Directory where you want to output the processed GEOscrape. Default at /docs/output_files, if -g is used this is ignored"),
 click.option('-s', '--sep', default="\t", help="Delimiter you want to use for the input and output file"),
 click.option('-h', '--hitWordsFile', default= Config.getHitTermsFile(), help = "Location of the hitTerms file. Default at docs/input_files/terms.txt"),
-click.option('-g', '--google', default="", help = "Enter the url of your google spreadsheet if you want to read and write your results to google sheets")]
+click.option('-g', '--google', default="", help = "Enter the url of your google spreadsheet if you want to read and write your results to google sheets (make sure the output of geoScrape is the 'first' sheet")]
 
 @click.group()
 def cli():
@@ -47,15 +47,15 @@ def process(**kwargs):
 def geoScrape(**kawargs):
     if not kawargs['file'] and not kawargs['google']:
         exit("You need to at least use one of the -f or -g flag")
-        
+
     startTime = time.time()
     print("Running with the options and value")
     for key, value in kawargs.items():
         if key == "sep":
             value = f"{value}"
         print(f"--{key}:{value} ")
-    geoScrapeSwitch = GeoScrapeMainSwitch(kawargs["file"], kawargs["outputdir"], kawargs["hitwordsfile"], kawargs["sep"])
-    geoScrapeSwitch.filterAndOutputFile(kawargs["google"])
+    geoScrapeSwitch = GeoScrapeMainSwitch(kawargs["file"], kawargs["outputdir"], kawargs["hitwordsfile"], kawargs["sep"], kawargs["google"])
+    geoScrapeSwitch.filterAndOutputFile()
     endTime = time.time()
     print(f'Execution took {formatTime(startTime, endTime)}')
 
