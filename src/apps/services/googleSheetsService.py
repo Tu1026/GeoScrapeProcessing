@@ -1,5 +1,6 @@
 import gspread
-from gspread_dataframe import set_with_dataframe, get_as_dataframe
+from gspread_dataframe import set_with_dataframe 
+import pandas as pd
 
 class GoogleSheetsService:
     gc = None
@@ -25,5 +26,7 @@ class GoogleSheetsService:
     
     def getWorkSheetAsFrame(self, index):
         self.getWorkSheet(index)
-        return get_as_dataframe(self.currWorkSheet)
+        return pd.DataFrame(self.currWorkSheet.get_values()[1:], columns= self.currWorkSheet.row_values(1))
+        
+
     
