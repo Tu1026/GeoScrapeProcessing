@@ -4,16 +4,18 @@ import os
 class Config:
 
     @staticmethod
-    def getProjectRootDir():
-        return Path(__file__).parent.parent
+    def iniHitTermsFile(customPath):
+        if customPath:
+            ConfigVariables.HITTERMSFILE = customPath
+        else: 
+            ConfigVariables.HITTERMSFILE = os.path.join(ConfigVariables.PROJECTROOTDIR, "docs/input_files/terms.txt")
 
     @staticmethod
-    def getHitTermsFile():
-        return os.path.join(Config.getProjectRootDir(), "docs/input_files/terms.txt")
-
-    @staticmethod
-    def getOutPutDir():
-        return os.path.join(Config.getProjectRootDir(), "docs/output_files")
+    def iniOutPutDir(customPath):
+        if customPath:
+           ConfigVariables.OUTPUTDIR = customPath 
+        else:
+            ConfigVariables.OUTPUTDIR = os.path.join(ConfigVariables.PROJECTROOTDIR, "docs/output_files")
 
 
     # ####For testing only
@@ -32,3 +34,9 @@ class Config:
     @staticmethod
     def getSoftwareName():
         return "Post GEOScrape Processing"
+
+
+class ConfigVariables():
+    PROJECTROOTDIR = Path(__file__).parent.parent
+    HITTERMSFILE = None
+    OUTPUTDIR = None
