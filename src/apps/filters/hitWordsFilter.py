@@ -1,5 +1,5 @@
 from .internalFilterAbs import InternalFilter
-from config import Config
+from config import Config, ConfigVariables
 from apps.readAndWriter import Reader
 
 class HitWordsFilter(InternalFilter):
@@ -8,11 +8,11 @@ class HitWordsFilter(InternalFilter):
     ## Why experiemnt passed filter
     successReason = "Experiment matches the key words given"
     ## The regex terms for unwanted hit terms
-    regexTerms = Reader.read_terms(Config.getHitTermsFile())
     filterType = "hitWords"
     relevantFields = ['Title', 'Summary', 'MeSH', 'SampleTerms']
     
-    def __init__(self, path=Config.getHitTermsFile()) -> None:
+    def __init__(self) -> None:
+        self.regexTerms = Reader.read_terms(ConfigVariables.HITTERMSFILE)
         super().__init__(self.filterType, self.relevantFields)
     
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?
