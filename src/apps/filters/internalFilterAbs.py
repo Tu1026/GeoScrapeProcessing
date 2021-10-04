@@ -47,8 +47,11 @@ class InternalFilter(ABC):
         print(f"Filtering {self.filterType}")
         df = self.extractTextColumn(df)
         start = time.time()
-        #df[self.resultColumn] = df.progress_apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
-        df[self.resultColumn] = df.swifter.allow_dask_on_strings(enable=True).apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
+        if self.filterType == "hitWords":
+            df["hitList"] = df.swifter.allow_dask_on_strings(enable=True).apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
+            df[self.resultColumn] = df["hitList"].swifter.allow_dask_on_strings(enable=True).apply(lambda cell: f'(Success) {successReason}' if cell else f'(Failure) {failedReason}')
+        else:
+            df[self.resultColumn] = df.swifter.allow_dask_on_strings(enable=True).apply(lambda row: self._filterTerms(row, terms,failedReason, successReason), axis=1)
         stop = time.time()
         print(f'Filtering {self.filterType} took {formatTime(start, stop)} seconds') 
         print(df.head())
@@ -58,6 +61,7 @@ class InternalFilter(ABC):
     ### Private implementation of filterTerms
     def _filterTerms(self, row, terms, faileReason, successReason):
         if self.filterType == "hitWords":
+            hitLists = []
             tempListOfWords = ""
             for column in self.text_columns:
                 if not pd.isna(row[column]):
@@ -65,10 +69,8 @@ class InternalFilter(ABC):
             for term in terms:
                 ## Sucess if a term is present in the text
                 if re.search(term, tempListOfWords, re.IGNORECASE):
-                    return (f'(Success) {successReason}')
-            ## Failure if the no terms are in the text at all
-            return (f'(Failure) {faileReason}')
-
+                    hitLists.append(term)
+            return set(hitLists)
         else:
             for column in self.text_columns:
                 if not pd.isna(row[column]):
