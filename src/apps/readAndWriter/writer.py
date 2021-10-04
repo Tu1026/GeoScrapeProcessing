@@ -47,7 +47,7 @@ class OutputSheetsFormatting:
     @staticmethod
     def filterOnePlarformCuratableFrameArray(origDf, newDf):
         print("Preparing single array platform curatable list")
-        columns = newDf.columns.difference(origDf.columns)
+        columns = OutputSheetsFormatting._getFilterResultColumns(origDf,newDf)
         for column in columns:
             newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
         newDf = newDf.loc[~newDf['Platforms'].str.contains(";")]
@@ -57,7 +57,7 @@ class OutputSheetsFormatting:
     @staticmethod
     def filterOnePlarformCuratableFrameRNASeq(origDf, newDf):
         print("Preparing single RNA seq platform curatable list")
-        columns = newDf.columns.difference(origDf.columns)
+        columns = OutputSheetsFormatting._getFilterResultColumns(origDf,newDf)
         for column in columns:
             newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
         newDf = newDf.loc[~newDf['Platforms'].str.contains(";")]
@@ -67,7 +67,7 @@ class OutputSheetsFormatting:
     @staticmethod
     def filterMultiArrayPlarformCuratableFrame(origDf, newDf):
         print("Preparing multiplatform curatable list")
-        columns = newDf.columns.difference(origDf.columns)
+        columns = OutputSheetsFormatting._getFilterResultColumns(origDf,newDf)
         for column in columns:
             newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
         newDf= newDf.loc[newDf['Platforms'].str.contains(";")]
@@ -77,7 +77,7 @@ class OutputSheetsFormatting:
     @staticmethod
     def filterMultiRNASeqPlarformCuratableFrame(origDf, newDf):
         print("Preparing multiplatform curatable list")
-        columns = newDf.columns.difference(origDf.columns)
+        columns = OutputSheetsFormatting._getFilterResultColumns(origDf,newDf)
         for column in columns:
             newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
         newDf = newDf.loc[newDf['Platforms'].str.contains(";")]
@@ -94,7 +94,7 @@ class OutputSheetsFormatting:
     @staticmethod
     def nonCuratedPlatFormFrame(origDf, newDf):
         print("Preparing non-curated platform experiments list")
-        columns = newDf.columns.difference(origDf.columns)
+        columns = OutputSheetsFormatting._getFilterResultColumns(origDf,newDf)
         for column in columns:
             if column != "nonCuratedPlatofrms Filter Results":
                 newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
@@ -105,7 +105,7 @@ class OutputSheetsFormatting:
     @staticmethod
     def unwantedFrame(origDf, newDf):
         print("Preparing a list of experiments that we cannot or do not want")
-        columns = newDf.columns.difference(origDf.columns)
+        columns = OutputSheetsFormatting._getFilterResultColumns(origDf,newDf)
         def searchFails(row):
             for column in columns:
                 if column != "nonCuratedPlatofrms Filter Results":
@@ -115,3 +115,6 @@ class OutputSheetsFormatting:
         newDf = newDf.loc[newDf.apply(searchFails, axis=1)]
         return newDf
 
+    @staticmethod
+    def _getFilterResultColumns(origDf, newDf):
+        return newDf.columns.difference(origDf.columns).difference(["hitList"])
