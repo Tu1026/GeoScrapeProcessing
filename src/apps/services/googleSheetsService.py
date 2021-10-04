@@ -17,8 +17,11 @@ class GoogleSheetsService:
         self.currWorkSheet = self.currSpreadSheet.get_worksheet(index)
 
     def createNewWorkSheetFromDf(self, name, df):
-        newWorkSheet = self.currSpreadSheet.add_worksheet(title=name, rows=10, cols= 10)
-        set_with_dataframe(newWorkSheet, df)
+        try:
+            newWorkSheet = self.currSpreadSheet.add_worksheet(title=name, rows=10, cols= 10)
+            set_with_dataframe(newWorkSheet, df)
+        except gspread.exceptions.APIError:
+            set_with_dataframe(self.currSpreadSheet.worksheet(name),df) 
     
     def getWorkSheetAsFrame(self, index):
         self.getWorkSheet(index)
