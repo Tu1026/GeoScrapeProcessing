@@ -42,7 +42,7 @@ class Writer:
             OutputSheetsFormatting.filterMultiArrayPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForMultiPlarformCuratableFrameArray}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.filterMultiRNASeqPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForMultiPlarformCuratableFrameRNA}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForNonCuratedPlaform}.{format}"), sep = sep, index=False)
-            OutputSheetsFormatting.groupByHitWordsFram(resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
+            OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForUnwantedFrame}.{format}"), sep = sep, index=False)
 
 
@@ -98,10 +98,10 @@ class OutputSheetsFormatting:
             for line in f:
                 hitWordsDict[line.strip()] = []
         for row in newDf.itertuples():
-            if row['hitList']:
-                for hit in row['hitList']:
-                    hitWordsDict[row['hitList']].append(row["Acc"])
-        return pd.DataFrame.from_dict(hitWordsDict, orient="index")
+            if row.hitList:
+                for hit in row.hitList:
+                    hitWordsDict[hit].append(row.Acc)
+        return pd.DataFrame.from_dict(hitWordsDict, orient="index").reset_index()
         
                 
                 
