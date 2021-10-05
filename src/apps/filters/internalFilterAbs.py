@@ -68,7 +68,7 @@ class InternalFilter(ABC):
                     tempListOfWords = tempListOfWords + row[column]
             for term in terms:
                 ## Sucess if a term is present in the text
-                if re.search(term, tempListOfWords, re.IGNORECASE):
+                if re.search("\\b" + term, tempListOfWords, re.IGNORECASE):
                     hitLists.add(term)
             return list(hitLists)
         else:
