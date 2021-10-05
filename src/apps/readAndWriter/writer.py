@@ -1,6 +1,8 @@
+import pandas as pd
 from datetime import datetime
 import os
-from apps.services import GoogleSheetsService
+from config import ConfigVariables
+
 class Writer:
 
     @staticmethod
@@ -13,6 +15,7 @@ class Writer:
         nameForMultiPlarformCuratableFrameArray = "(3. Check if you need to split platforms Arrays) Processed_GeoSrape_mainFrame"
         nameForMultiPlarformCuratableFrameRNA = "(4. Check if you need to split platforms RNA-seq) Processed_GeoSrape_mainFrame"
         nameForNonCuratedPlaform ="(5. Check if all platforms can be curated) Processed_GeoSrape_mainFrame" 
+        nameForHitList = "(Experiments grouped by hitWords)"
         nameForUnwantedFrame ="(Disgarded Experiments) Processed_GeoSrape_mainFrame"
 
         if gService:
@@ -22,6 +25,7 @@ class Writer:
             gService.createNewWorkSheetFromDf(nameForMultiPlarformCuratableFrameArray, OutputSheetsFormatting.filterMultiArrayPlarformCuratableFrame(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForMultiPlarformCuratableFrameRNA, OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForNonCuratedPlaform, OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame))
+            gService.createNewWorkSheetFromDf(nameForHitList, OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame))
             gService.createNewWorkSheetFromDf(nameForUnwantedFrame, OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame))
 
 
@@ -38,6 +42,7 @@ class Writer:
             OutputSheetsFormatting.filterMultiArrayPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForMultiPlarformCuratableFrameArray}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.filterMultiRNASeqPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForMultiPlarformCuratableFrameRNA}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForNonCuratedPlaform}.{format}"), sep = sep, index=False)
+            OutputSheetsFormatting.groupByHitWordsFram(resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForUnwantedFrame}.{format}"), sep = sep, index=False)
 
 
@@ -85,12 +90,22 @@ class OutputSheetsFormatting:
         return newDf 
 
 
-    ## @TODO Alex's group by hitwords sheet
     @staticmethod
-    def groupByHitWordsFrame(origDf, newDf):
-        pass
+    def groupByHitWordsFrame(newDf):
+        print("Preparing the list that Alex wants (group experiments by hit words)")
+        hitWordsDict = {}
+        with open(ConfigVariables.HITTERMSFILE, "r") as f:
+            for line in f:
+                hitWordsDict[line.strip()] = []
+        for row in newDf.itertuples():
+            if row['hitList']:
+                for hit in row['hitList']:
+                    hitWordsDict[row['hitList']].append(row["Acc"])
+        return pd.DataFrame.from_dict(hitWordsDict, orient="index")
         
-
+                
+                
+                
     @staticmethod
     def nonCuratedPlatFormFrame(origDf, newDf):
         print("Preparing non-curated platform experiments list")
