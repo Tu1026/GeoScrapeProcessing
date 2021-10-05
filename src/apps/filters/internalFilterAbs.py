@@ -61,7 +61,7 @@ class InternalFilter(ABC):
     ### Private implementation of filterTerms
     def _filterTerms(self, row, terms, faileReason, successReason):
         if self.filterType == "hitWords":
-            hitLists = []
+            hitLists = set()
             tempListOfWords = ""
             for column in self.text_columns:
                 if not pd.isna(row[column]):
@@ -69,8 +69,8 @@ class InternalFilter(ABC):
             for term in terms:
                 ## Sucess if a term is present in the text
                 if re.search(term, tempListOfWords, re.IGNORECASE):
-                    hitLists.append(term)
-            return set(hitLists)
+                    hitLists.add(term)
+            return list(hitLists)
         else:
             for column in self.text_columns:
                 if not pd.isna(row[column]):
