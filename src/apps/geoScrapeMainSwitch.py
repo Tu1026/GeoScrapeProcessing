@@ -5,11 +5,10 @@ from apps.services import GoogleSheetsService
 class GeoScrapeMainSwitch:
     hitWordsFileLoc = ""
     geoScrapeFrame = None
-    filters = ["SuperSeriesFilter", "RNATypeFilter", "SeqTypeFilter", "HitWordsFilter", "NonCuratedPlatFilter"]
     resultsFrame =None
     outPutFileDir = ""
     sep = ""
-    listOfFilters = [HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter, SuperSeriesFilter]
+    listOfFilters = [HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter, SuperSeriesFilter, SampleSizeFilter]
     google = ""
     gService = None
 
