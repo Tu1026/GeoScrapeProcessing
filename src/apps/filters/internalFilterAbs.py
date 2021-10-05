@@ -71,6 +71,12 @@ class InternalFilter(ABC):
                 if re.search("\\b" + term, tempListOfWords, re.IGNORECASE):
                     hitLists.add(term)
             return list(hitLists)
+        
+        elif self.filterType == "sampleSize":
+            for column in self.text_columns:
+                if int(row[column]) <= terms:
+                    return (f'(Failure) {faileReason}')
+            return (f'(Success) {successReason}')
         else:
             for column in self.text_columns:
                 if not pd.isna(row[column]):
