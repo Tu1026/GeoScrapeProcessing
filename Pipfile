@@ -13,6 +13,9 @@ click = "*"
 tqdm = "*"
 requests = "*"
 swifter = "*"
+gspread = "*"
+gspread-dataframe = "*"
+pytest = "*"
 
 [dev-packages]
 
