@@ -14,7 +14,8 @@ class Writer:
         nameForOnePlarformCuratableFrameRNA =  "(2.Ready for loading RNA-seq) Processed_GeoSrape_mainFrame"
         nameForMultiPlarformCuratableFrameArray = "(3. Check if you need to split platforms Arrays) Processed_GeoSrape_mainFrame"
         nameForMultiPlarformCuratableFrameRNA = "(4. Check if you need to split platforms RNA-seq) Processed_GeoSrape_mainFrame"
-        nameForNonCuratedPlaform ="(5. Check if all platforms can be curated) Processed_GeoSrape_mainFrame" 
+        nameForNonCuratedPlaform ="(5. Check if all platforms can be curated) Processed_GeoSrape_mainFrame"
+        nameForDoubleCheckFrame = "(6. Double check if these experiments are indeed wrong RNA type) Double_Check_Frame"
         nameForHitList = "(Experiments grouped by hitWords)"
         nameForUnwantedFrame ="(Disgarded Experiments) Processed_GeoSrape_mainFrame"
 
@@ -25,6 +26,7 @@ class Writer:
             gService.createNewWorkSheetFromDf(nameForMultiPlarformCuratableFrameArray, OutputSheetsFormatting.filterMultiArrayPlarformCuratableFrame(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForMultiPlarformCuratableFrameRNA, OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForNonCuratedPlaform, OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame))
+            gService.createNewWorkSheetFromDf(nameForDoubleCheckFrame, OutputSheetsFormatting.doubleCheckFrame(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForHitList, OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame))
             gService.createNewWorkSheetFromDf(nameForUnwantedFrame, OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame))
 
@@ -43,6 +45,7 @@ class Writer:
             OutputSheetsFormatting.filterMultiRNASeqPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForMultiPlarformCuratableFrameRNA}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForNonCuratedPlaform}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
+            OutputSheetsFormatting.doubleCheckFrame(resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForUnwantedFrame}.{format}"), sep = sep, index=False)
 
 
@@ -105,7 +108,6 @@ class OutputSheetsFormatting:
         
                 
                 
-                
     @staticmethod
     def nonCuratedPlatFormFrame(origDf, newDf):
         print("Preparing non-curated platform experiments list")
@@ -116,6 +118,18 @@ class OutputSheetsFormatting:
             else:
                 newDf = newDf.loc[newDf[column].str.startswith("(Failure)")]
         return newDf
+
+    @staticmethod
+    def doubleCheckFrame(origDf, newDf):
+        print("Preparing a list that needs to be double checked for RNA type")
+        columns = OutputSheetsFormatting._getFilterResultColumns(origDf, newDf)
+        for column in columns:
+            if column != "RNA Filter Results" or column != "nonCuratedPlatofrms Filter Results":
+                newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
+            else:
+                newDf = newDf.loc[newDf[column].str.startswith("(Failure)")]
+        return newDf
+
 
     @staticmethod
     def unwantedFrame(origDf, newDf):
