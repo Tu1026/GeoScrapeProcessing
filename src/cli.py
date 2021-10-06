@@ -44,20 +44,11 @@ def process(**kwargs):
 @cli.command("geoScrape")
 @add_options(geoScrape_option)
 def geoScrape(**kawargs):
+    
     Config.initializeProgram(kawargs)
-    ##Initialize variables
-    Config._iniHitTermsFile(kawargs["hitwordsfile"])
-    Config._iniOutPutDir(kawargs["outputdir"])
-
-
 
     ##Start running the application
     startTime = time.time()
-    print("Running with the options and value")
-    for key, value in kawargs.items():
-        if key == "sep":
-            value = f"{value}"
-        print(f"--{key}:{value} ")
     geoScrapeSwitch = GeoScrapeMainSwitch(kawargs["file"], ConfigVariables.OUTPUTDIR, ConfigVariables.HITTERMSFILE, kawargs["sep"], kawargs["google"], kawargs["noterm"] )
     geoScrapeSwitch.filterAndOutputFile()
     endTime = time.time()
