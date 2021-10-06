@@ -153,6 +153,6 @@ class OutputSheetsFormatting:
         newDf = newDf.loc[newDf.apply(searchFails, axis=1)]
         return newDf
 
-        @staticmethod
-        def __getFilterResultColumns(origDf, newDf):
-            return newDf.columns.difference(origDf.columns).difference(["hitList"])
+    @staticmethod
+    def __getFilterResultColumns(origDf, newDf):
+        return newDf.columns.difference(origDf.columns).difference(["hitList"])
