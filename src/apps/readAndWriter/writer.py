@@ -43,7 +43,7 @@ class Writer:
             OutputSheetsFormatting.filterMultiArrayPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForMultiPlarformCuratableFrameArray}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.filterMultiRNASeqPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForMultiPlarformCuratableFrameRNA}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForNonCuratedPlaform}.{format}"), sep = sep, index=False)
-            OutputSheetsFormatting.doubleCheckFrame(resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
+            OutputSheetsFormatting.doubleCheckFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForDoubleCheckFrame}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
             resultsFrame.to_csv(os.path.join(outPutDir,f"{currTime}/{nameForAllFrame}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForUnwantedFrame}.{format}"), sep = sep, index=False)
@@ -125,7 +125,7 @@ class OutputSheetsFormatting:
         columns = OutputSheetsFormatting._getFilterResultColumns(origDf, newDf)
         for column in columns:
             if column == "RNA Filter Results" or column == "nonCuratedPlatofrms Filter Results":
-                newDf = newDf.loc[newDf[column].str.startswith("(Failure)")]
+                newDf = newDf.loc[~newDf[column].str.startswith("(Success)")]
             else:
                 newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
         return newDf
@@ -137,8 +137,10 @@ class OutputSheetsFormatting:
         columns = OutputSheetsFormatting._getFilterResultColumns(origDf,newDf)
         def searchFails(row):
             for column in columns:
-                if column != "nonCuratedPlatofrms Filter Results":
-                    if row[column].startswith("(Failure"):
+                if column == "nonCuratedPlatofrms Filter Results" or column == "RNA Filter Results":
+                    continue
+                else:
+                    if row[column].startswith("(Failure)"):
                         return True
             return False
         newDf = newDf.loc[newDf.apply(searchFails, axis=1)]
