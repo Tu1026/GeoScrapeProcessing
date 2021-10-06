@@ -90,5 +90,5 @@ class ConfigVariables():
     FILELOCATION = None
     SEP=None
     GOOGLESERVICE = None
-    NOHITTERM=False
+    NOHITTERM= None
 
