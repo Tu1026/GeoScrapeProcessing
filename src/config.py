@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+from apps.services import GoogleSheetsService
 
 class Config:
     ##Main initializing method should take from click input to set variables
@@ -42,8 +43,11 @@ class Config:
         ConfigVariables.NOHITTERM = noHitTerm
     
     @staticmethod
-    def _setGoogleUrl(url):
-        ConfigVariables.GOOGLEURL = url
+    def _setGoogleService(url):
+        if url:
+            GoogleSheetsService(url)
+        else:
+            ConfigVariables.GOOGLEURL = url
 
     @staticmethod
     def _setSeperator(sep):
@@ -85,6 +89,6 @@ class ConfigVariables():
     OUTPUTDIR = None
     FILELOCATION = None
     SEP=None
-    GOOGLEURL =None
+    GOOGLESERVICE = None
     NOHITTERM=False
 
