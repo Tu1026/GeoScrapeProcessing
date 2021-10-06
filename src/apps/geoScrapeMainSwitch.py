@@ -3,22 +3,19 @@ from apps.readAndWriter import Reader, Writer
 from src.config import ConfigVariables
 
 class GeoScrapeMainSwitch:
-    listOfFilters = [HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter, SuperSeriesFilter, SampleSizeFilter]
-    
-    def __init__(self, notFilterHitWords) -> None:
-        if notFilterHitWords:
-            self.listOfFilters.remove(HitWordsFilter)
+    listOfFilters = {HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter, SuperSeriesFilter, SampleSizeFilter}.remove(ConfigVariables.HITTERMSFILE)
+
+    def __init__(self) -> None:
         if ConfigVariables.GOOGLESERVICE:
             self.geoScrapeFrame = ConfigVariables.GOOGLESERVICE.getWorkSheetAsFrame(0)
         else:
             self.geoScrapeFrame = Reader.pandas_read(ConfigVariables.FILELOCATION, self.sep)
         self.resultsFrame = self.geoScrapeFrame
-        self.notFilterHitWords = notFilterHitWords
-    
+        
 
     def filterAndOutputFile(self):
         self._runFilters()
-        Writer.writeGEOScrapeToCsvs(self.resultsFrame, self.geoScrapeFrame, self.notFilterHitWords)
+        Writer.writeGEOScrapeToCsvs(self.resultsFrame, self.geoScrapeFrame)
         
 
     def _initalizeFilters(self):
