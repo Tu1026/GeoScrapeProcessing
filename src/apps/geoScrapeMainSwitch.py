@@ -3,31 +3,27 @@ from apps.readAndWriter import Reader, Writer
 from apps.services import GoogleSheetsService
 
 class GeoScrapeMainSwitch:
-    hitWordsFileLoc = ""
-    geoScrapeFrame = None
-    resultsFrame =None
-    outPutFileDir = ""
-    sep = ""
     listOfFilters = [HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter, SuperSeriesFilter, SampleSizeFilter]
-    google = ""
-    gService = None
-
-    def __init__(self, inputFileLocation, outPutFileDir, hitWordsFileLoc, sep, google) -> None:
-        self.google = google
+    def __init__(self, inputFileLocation, outPutFileDir, hitWordsFileLoc, sep, google, notFilterHitWords) -> None:
+        if notFilterHitWords:
+            self.listOfFilters.remove(HitWordsFilter)
+        print(self.listOfFilters)
         self.hitWordsFileLoc = hitWordsFileLoc
         self.sep = sep
-        if self.google:
-            self.gService = GoogleSheetsService(self.google)
+        if google:
+            self.gService = GoogleSheetsService(google)
             self.geoScrapeFrame = self.gService.getWorkSheetAsFrame(0)
+            self.outPutFileDir = ""
         else:
             self.geoScrapeFrame = Reader.pandas_read(inputFileLocation, self.sep)
             self.outPutFileDir = outPutFileDir
         self.resultsFrame = self.geoScrapeFrame
+        self.notFilterHitWords = notFilterHitWords
     
 
     def filterAndOutputFile(self):
         self._runFilters()
-        Writer.writeGEOScrapeToCsvs(self.resultsFrame, self.geoScrapeFrame, self.sep, self.outPutFileDir, self.gService)
+        Writer.writeGEOScrapeToCsvs(self.resultsFrame, self.geoScrapeFrame, self.sep, self.outPutFileDir, self.gService, self.notFilterHitWords)
         
 
     def _initalizeFilters(self):
