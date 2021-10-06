@@ -1,9 +1,9 @@
 from apps.filters import *
 from apps.readAndWriter import Reader, Writer
-from src.config import ConfigVariables
+from config import ConfigVariables
 
 class GeoScrapeMainSwitch:
-    listOfFilters = {HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter, SuperSeriesFilter, SampleSizeFilter}.remove(ConfigVariables.HITTERMSFILE)
+    listOfFilters = {HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter, SuperSeriesFilter, SampleSizeFilter}.discard(ConfigVariables.HITTERMSFILE)
 
     def __init__(self) -> None:
         if ConfigVariables.GOOGLESERVICE:
