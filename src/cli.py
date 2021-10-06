@@ -9,8 +9,6 @@ from apps.misc import formatTime
 ##Builiding command line options. Cannot figure out how to modularize click options
 
 
-##Have to limit thread usage because frink blocks too many
-Config.setThreads()
 
 ###Build Options
 def add_options(options):
@@ -27,7 +25,8 @@ geoScrape_option = [click.option('-f', '--file', help="File that contains the GE
 click.option('-o', '--outPutDir', default="",help="Directory where you want to output the processed GEOscrape. Default at /docs/output_files, if -g is used this is ignored"),
 click.option('-s', '--sep', default="\t", help="Delimiter you want to use for the input and output file"),
 click.option('-h', '--hitWordsFile', default= "", help = "Location of the hitTerms file. Default at docs/input_files/terms.txt"),
-click.option('-g', '--google', default="", help = "Enter the url of your google spreadsheet if you want to read and write your results to google sheets (make sure the output of geoScrape is the 'first' sheet")]
+click.option('-g', '--google', default="", help = "Enter the url of your google spreadsheet if you want to read and write your results to google sheets (make sure the output of geoScrape is the 'first' sheet"),
+click.option('-n', '--noTerm/--withTerm', default=False, help = "Use this flag to filter experiments without using terms")]
 
 @click.group()
 def cli():
@@ -45,14 +44,12 @@ def process(**kwargs):
 @cli.command("geoScrape")
 @add_options(geoScrape_option)
 def geoScrape(**kawargs):
-
+    Config.initializeProgram(kawargs)
     ##Initialize variables
-    Config.iniHitTermsFile(kawargs["hitwordsfile"])
-    Config.iniOutPutDir(kawargs["outputdir"])
+    Config._iniHitTermsFile(kawargs["hitwordsfile"])
+    Config._iniOutPutDir(kawargs["outputdir"])
 
-    ##Check no overlapping flags
-    if not kawargs['file'] and not kawargs['google']:
-        exit("You need to at least use one of the -f or -g flag")
+
 
     ##Start running the application
     startTime = time.time()
@@ -61,10 +58,11 @@ def geoScrape(**kawargs):
         if key == "sep":
             value = f"{value}"
         print(f"--{key}:{value} ")
-    geoScrapeSwitch = GeoScrapeMainSwitch(kawargs["file"], ConfigVariables.OUTPUTDIR, ConfigVariables.HITTERMSFILE, kawargs["sep"], kawargs["google"])
+    geoScrapeSwitch = GeoScrapeMainSwitch(kawargs["file"], ConfigVariables.OUTPUTDIR, ConfigVariables.HITTERMSFILE, kawargs["sep"], kawargs["google"], kawargs["noterm"] )
     geoScrapeSwitch.filterAndOutputFile()
     endTime = time.time()
     print(f'Execution took {formatTime(startTime, endTime)}')
+
 
 if __name__ == "__main__":
     print('\n')
