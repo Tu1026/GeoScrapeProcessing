@@ -3,7 +3,7 @@ import click
 from apps.geoScrapeMainSwitch import GeoScrapeMainSwitch
 import time
 from apps.misc import formatTime
-from src.apps.filters import hitWordsFilter
+from apps.filters import hitWordsFilter
 
 
 ##Builiding command line options. Cannot figure out how to modularize click options
