@@ -42,4 +42,5 @@ through the pipeline.
 You can use "results/technology_type" to tell which GSEs you need to put
 in the RNAseq pipeline and which can just go on the master curation list.
 
-
+## RUNTIME
+The peformance is being profiled here https://github.com/PavlidisLab/GEOscrape_post_processing/blob/profiler_branch/cProfile/profile.txt
