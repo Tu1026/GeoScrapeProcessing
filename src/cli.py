@@ -49,7 +49,7 @@ def geoScrape(**kawargs):
 
     ##Start running the application
     startTime = time.time()
-    geoScrapeSwitch = GeoScrapeMainSwitch(kawargs["file"], ConfigVariables.OUTPUTDIR, ConfigVariables.HITTERMSFILE, kawargs["sep"], kawargs["google"], kawargs["noterm"] )
+    geoScrapeSwitch = GeoScrapeMainSwitch()
     geoScrapeSwitch.filterAndOutputFile()
     endTime = time.time()
     print(f'Execution took {formatTime(startTime, endTime)}')
