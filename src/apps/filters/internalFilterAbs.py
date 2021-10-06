@@ -74,8 +74,9 @@ class InternalFilter(ABC):
         
         elif self.filterType == "sampleSize":
             for column in self.text_columns:
-                if int(row[column]) <= terms:
-                    return (f'(Failure) {faileReason}')
+                if not pd.isna(row[column]) or not row[column] == "":
+                    if int(row[column]) <= terms:
+                        return (f'(Failure) {faileReason}')
             return (f'(Success) {successReason}')
 
         else:
