@@ -1,9 +1,9 @@
-from requests.sessions import default_headers
 from config import Config, ConfigVariables
 import click
 from apps.geoScrapeMainSwitch import GeoScrapeMainSwitch
 import time
 from apps.misc import formatTime
+from src.apps.filters import hitWordsFilter
 
 
 ##Builiding command line options. Cannot figure out how to modularize click options
@@ -26,7 +26,7 @@ click.option('-o', '--outPutDir', default="",help="Directory where you want to o
 click.option('-s', '--sep', default="\t", help="Delimiter you want to use for the input and output file"),
 click.option('-h', '--hitWordsFile', default= "", help = "Location of the hitTerms file. Default at docs/input_files/terms.txt"),
 click.option('-g', '--google', default="", help = "Enter the url of your google spreadsheet if you want to read and write your results to google sheets (make sure the output of geoScrape is the 'first' sheet"),
-click.option('-n', '--noTerm/--withTerm', default=False, help = "Use this flag to filter experiments without using terms")]
+click.option('-n', '--noTerm', flag_value=hitWordsFilter.HitWordsFilter,help = "Use this flag to filter experiments without using terms")]
 
 @click.group()
 def cli():
