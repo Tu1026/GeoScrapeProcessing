@@ -1,6 +1,5 @@
 from apps.filters import *
 from apps.readAndWriter import Reader, Writer
-from apps.services import GoogleSheetsService
 from src.config import ConfigVariables
 
 class GeoScrapeMainSwitch:
