@@ -20,7 +20,6 @@ class Writer:
         nameForUnwantedFrame ="(Disgarded Experiments) Processed_GeoSrape_mainFrame"
 
         if gService:
-            gService.createNewWorkSheetFromDf(nameForAllFrame, resultsFrame)
             gService.createNewWorkSheetFromDf(nameForOnePlarformCuratableFrameArray, OutputSheetsFormatting.filterOnePlarformCuratableFrameArray(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForOnePlarformCuratableFrameRNA, OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForMultiPlarformCuratableFrameArray, OutputSheetsFormatting.filterMultiArrayPlarformCuratableFrame(origFrame, resultsFrame))
@@ -28,6 +27,7 @@ class Writer:
             gService.createNewWorkSheetFromDf(nameForNonCuratedPlaform, OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForDoubleCheckFrame, OutputSheetsFormatting.doubleCheckFrame(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForHitList, OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame))
+            gService.createNewWorkSheetFromDf(nameForAllFrame, resultsFrame)
             gService.createNewWorkSheetFromDf(nameForUnwantedFrame, OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame))
 
 
@@ -38,14 +38,14 @@ class Writer:
                 format="csv"
             ## Write main frame
             os.mkdir(os.path.join(outPutDir,currTime))
-            resultsFrame.to_csv(os.path.join(outPutDir,f"{currTime}/{nameForAllFrame}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.filterOnePlarformCuratableFrameArray(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForOnePlarformCuratableFrameArray}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForOnePlarformCuratableFrameRNA}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.filterMultiArrayPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForMultiPlarformCuratableFrameArray}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.filterMultiRNASeqPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForMultiPlarformCuratableFrameRNA}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForNonCuratedPlaform}.{format}"), sep = sep, index=False)
-            OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.doubleCheckFrame(resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
+            OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
+            resultsFrame.to_csv(os.path.join(outPutDir,f"{currTime}/{nameForAllFrame}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForUnwantedFrame}.{format}"), sep = sep, index=False)
 
 
@@ -124,10 +124,10 @@ class OutputSheetsFormatting:
         print("Preparing a list that needs to be double checked for RNA type")
         columns = OutputSheetsFormatting._getFilterResultColumns(origDf, newDf)
         for column in columns:
-            if column != "RNA Filter Results" or column != "nonCuratedPlatofrms Filter Results":
-                newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
-            else:
+            if column == "RNA Filter Results" or column == "nonCuratedPlatofrms Filter Results":
                 newDf = newDf.loc[newDf[column].str.startswith("(Failure)")]
+            else:
+                newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
         return newDf
 
 
