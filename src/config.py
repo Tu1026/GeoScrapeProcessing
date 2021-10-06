@@ -11,10 +11,10 @@ class Config:
         Config._setThreads()
         Config._setLoadFileLocation(kawargs['file'])
         Config._setSeperator(kawargs['sep'])
-        Config._setGoogleUrl(kawargs['google']) 
+        Config._setGoogleService(kawargs['google']) 
         Config._setUseHitTermOrNot(kawargs['noterm'])
-        Config._checkNoOverLappingFlags(kawargs['file'], kawargs['google'])
         Config._printAllVariables(kawargs)
+        Config._checkNoOverLappingFlags(kawargs['file'], kawargs['google'])
         ##-------------------------------------------------------------------------Below methods should be private and not callable
     @staticmethod
     def _setHitTermsFile(customPath):
@@ -55,7 +55,7 @@ class Config:
 
     @staticmethod
     def _checkNoOverLappingFlags(fileLocation, googleUrl):
-        if bool(fileLocation) ^ bool(googleUrl):
+        if not bool(fileLocation) ^ bool(googleUrl):
             exit("You need to at least use one of the -f or -g flag but not both")
 
 
