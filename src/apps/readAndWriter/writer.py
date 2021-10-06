@@ -6,11 +6,12 @@ from config import ConfigVariables
 class Writer:
 
     @staticmethod
-    def writeGEOScrapeToCsvs(resultsFrame, origFrame, notFilterHitWords):
+    def writeGEOScrapeToCsvs(resultsFrame, origFrame):
         outPutDir = ConfigVariables.OUTPUTDIR
         gService = ConfigVariables.GOOGLESERVICE
         sep = ConfigVariables.SEP
         print(f"Outputing the file in your selected location at {outPutDir}")
+
         currTime = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
         nameForAllFrame = "Processed_GeoSrape_mainFrame" 
         nameForOnePlarformCuratableFrameArray = "(1.Ready for loading Arrays) Processed_GeoSrape_mainFrame" 
@@ -23,6 +24,7 @@ class Writer:
         nameForUnwantedFrame ="(Disgarded Experiments) Processed_GeoSrape_mainFrame"
 
         if gService:
+            # [gService.createNewWorkSheetFromDf( for methodToWriteToGoogle in dir(OutputSheetsFormatting) if not methodToWriteToGoogle.startswith("__")]
             gService.createNewWorkSheetFromDf(nameForOnePlarformCuratableFrameArray, OutputSheetsFormatting.filterOnePlarformCuratableFrameArray(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForOnePlarformCuratableFrameRNA, OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForMultiPlarformCuratableFrameArray, OutputSheetsFormatting.filterMultiArrayPlarformCuratableFrame(origFrame, resultsFrame))
@@ -58,7 +60,7 @@ class OutputSheetsFormatting:
     @staticmethod
     def filterOnePlarformCuratableFrameArray(origDf, newDf):
         print("Preparing single array platform curatable list")
-        columns = OutputSheetsFormatting._getFilterResultColumns(origDf,newDf)
+        columns = OutputSheetsFormatting.__getFilterResultColumns(origDf,newDf)
         for column in columns:
             newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
         newDf = newDf.loc[~newDf['Platforms'].str.contains(";")]
@@ -68,7 +70,7 @@ class OutputSheetsFormatting:
     @staticmethod
     def filterOnePlarformCuratableFrameRNASeq(origDf, newDf):
         print("Preparing single RNA seq platform curatable list")
-        columns = OutputSheetsFormatting._getFilterResultColumns(origDf,newDf)
+        columns = OutputSheetsFormatting.__getFilterResultColumns(origDf,newDf)
         for column in columns:
             newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
         newDf = newDf.loc[~newDf['Platforms'].str.contains(";")]
@@ -78,7 +80,7 @@ class OutputSheetsFormatting:
     @staticmethod
     def filterMultiArrayPlarformCuratableFrame(origDf, newDf):
         print("Preparing multiplatform curatable list")
-        columns = OutputSheetsFormatting._getFilterResultColumns(origDf,newDf)
+        columns = OutputSheetsFormatting.__getFilterResultColumns(origDf,newDf)
         for column in columns:
             newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
         newDf= newDf.loc[newDf['Platforms'].str.contains(";")]
@@ -88,7 +90,7 @@ class OutputSheetsFormatting:
     @staticmethod
     def filterMultiRNASeqPlarformCuratableFrame(origDf, newDf):
         print("Preparing multiplatform curatable list")
-        columns = OutputSheetsFormatting._getFilterResultColumns(origDf,newDf)
+        columns = OutputSheetsFormatting.__getFilterResultColumns(origDf,newDf)
         for column in columns:
             newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
         newDf = newDf.loc[newDf['Platforms'].str.contains(";")]
@@ -97,7 +99,7 @@ class OutputSheetsFormatting:
 
 
     @staticmethod
-    def groupByHitWordsFrame(newDf):
+    def groupByHitWordsFrame(_, newDf):
         print("Preparing the list that Alex wants (group experiments by hit words)")
         hitWordsDict = {}
         with open(ConfigVariables.HITTERMSFILE, "r") as f:
@@ -114,7 +116,7 @@ class OutputSheetsFormatting:
     @staticmethod
     def nonCuratedPlatFormFrame(origDf, newDf):
         print("Preparing non-curated platform experiments list")
-        columns = OutputSheetsFormatting._getFilterResultColumns(origDf,newDf)
+        columns = OutputSheetsFormatting.__getFilterResultColumns(origDf,newDf)
         for column in columns:
             if column != "nonCuratedPlatofrms Filter Results":
                 newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
@@ -125,7 +127,7 @@ class OutputSheetsFormatting:
     @staticmethod
     def doubleCheckFrame(origDf, newDf):
         print("Preparing a list that needs to be double checked for RNA type")
-        columns = OutputSheetsFormatting._getFilterResultColumns(origDf, newDf)
+        columns = OutputSheetsFormatting.__getFilterResultColumns(origDf, newDf)
         for column in columns:
             if column == "RNA Filter Results" or column == "nonCuratedPlatofrms Filter Results":
                 newDf = newDf.loc[~newDf[column].str.startswith("(Success)")]
@@ -137,7 +139,7 @@ class OutputSheetsFormatting:
     @staticmethod
     def unwantedFrame(origDf, newDf):
         print("Preparing a list of experiments that we cannot or do not want")
-        columns = OutputSheetsFormatting._getFilterResultColumns(origDf,newDf)
+        columns = OutputSheetsFormatting.__getFilterResultColumns(origDf,newDf)
         def searchFails(row):
             for column in columns:
                 if column == "nonCuratedPlatofrms Filter Results" or column == "RNA Filter Results":
@@ -149,6 +151,6 @@ class OutputSheetsFormatting:
         newDf = newDf.loc[newDf.apply(searchFails, axis=1)]
         return newDf
 
-    @staticmethod
-    def _getFilterResultColumns(origDf, newDf):
-        return newDf.columns.difference(origDf.columns).difference(["hitList"])
+        @staticmethod
+        def __getFilterResultColumns(origDf, newDf):
+            return newDf.columns.difference(origDf.columns).difference(["hitList"])
