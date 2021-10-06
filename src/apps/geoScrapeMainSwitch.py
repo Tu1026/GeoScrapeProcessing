@@ -18,7 +18,7 @@ class GeoScrapeMainSwitch:
 
     ### Main interactable method by outside
     def filterAndOutputFile(self):
-        self._runFilters()
+        self.__runFilters()
         Writer.writeGEOScrapeToCsvs(self.resultsFrame, self.geoScrapeFrame)
         
 
@@ -30,7 +30,7 @@ class GeoScrapeMainSwitch:
         return initializedFilters
 
     def __runFilters(self):
-        filters = self._initalizeFilters()
+        filters = self.__initalizeFilters()
         print("Start running the file on all filters............................")
         for filter in filters:
             self.resultsFrame = filter.filterTerms(self.resultsFrame)
