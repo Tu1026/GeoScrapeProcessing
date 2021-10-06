@@ -91,4 +91,3 @@ class ConfigVariables():
     SEP=None
     GOOGLESERVICE = None
     NOHITTERM= None
-
