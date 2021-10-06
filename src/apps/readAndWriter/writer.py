@@ -31,7 +31,8 @@ class Writer:
             gService.createNewWorkSheetFromDf(nameForMultiPlarformCuratableFrameRNA, OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForNonCuratedPlaform, OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForDoubleCheckFrame, OutputSheetsFormatting.doubleCheckFrame(origFrame, resultsFrame))
-            gService.createNewWorkSheetFromDf(nameForHitList, OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame))
+            if not ConfigVariables.NOHITTERM:
+                gService.createNewWorkSheetFromDf(nameForHitList, OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame))
             gService.createNewWorkSheetFromDf(nameForAllFrame, resultsFrame)
             gService.createNewWorkSheetFromDf(nameForUnwantedFrame, OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame))
 
@@ -49,7 +50,8 @@ class Writer:
             OutputSheetsFormatting.filterMultiRNASeqPlarformCuratableFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForMultiPlarformCuratableFrameRNA}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForNonCuratedPlaform}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.doubleCheckFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForDoubleCheckFrame}.{format}"), sep = sep, index=False)
-            OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
+            if not ConfigVariables.NOHITTERM:
+                OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
             resultsFrame.to_csv(os.path.join(outPutDir,f"{currTime}/{nameForAllFrame}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForUnwantedFrame}.{format}"), sep = sep, index=False)
 
