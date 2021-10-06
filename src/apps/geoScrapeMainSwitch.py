@@ -5,26 +5,22 @@ from src.config import ConfigVariables
 
 class GeoScrapeMainSwitch:
     listOfFilters = [HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter, SuperSeriesFilter, SampleSizeFilter]
-    def __init__(self, outPutFileDir, hitWordsFileLoc, sep, google, notFilterHitWords) -> None:
+
+    def __init__(self, google, notFilterHitWords) -> None:
         if notFilterHitWords:
             self.listOfFilters.remove(HitWordsFilter)
-        print(self.listOfFilters)
-        self.hitWordsFileLoc = hitWordsFileLoc
-        self.sep = sep
         if google:
             self.gService = GoogleSheetsService(google)
             self.geoScrapeFrame = self.gService.getWorkSheetAsFrame(0)
-            self.outPutFileDir = ""
         else:
             self.geoScrapeFrame = Reader.pandas_read(ConfigVariables.FILELOCATION, self.sep)
-            self.outPutFileDir = outPutFileDir
         self.resultsFrame = self.geoScrapeFrame
         self.notFilterHitWords = notFilterHitWords
     
 
     def filterAndOutputFile(self):
         self._runFilters()
-        Writer.writeGEOScrapeToCsvs(self.resultsFrame, self.geoScrapeFrame, self.sep, self.outPutFileDir, self.gService, self.notFilterHitWords)
+        Writer.writeGEOScrapeToCsvs(self.resultsFrame, self.geoScrapeFrame, self.gService, self.notFilterHitWords)
         
 
     def _initalizeFilters(self):
