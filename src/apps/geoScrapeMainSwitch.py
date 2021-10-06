@@ -1,10 +1,11 @@
 from apps.filters import *
 from apps.readAndWriter import Reader, Writer
 from apps.services import GoogleSheetsService
+from src.config import ConfigVariables
 
 class GeoScrapeMainSwitch:
     listOfFilters = [HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter, SuperSeriesFilter, SampleSizeFilter]
-    def __init__(self, inputFileLocation, outPutFileDir, hitWordsFileLoc, sep, google, notFilterHitWords) -> None:
+    def __init__(self, outPutFileDir, hitWordsFileLoc, sep, google, notFilterHitWords) -> None:
         if notFilterHitWords:
             self.listOfFilters.remove(HitWordsFilter)
         print(self.listOfFilters)
@@ -15,7 +16,7 @@ class GeoScrapeMainSwitch:
             self.geoScrapeFrame = self.gService.getWorkSheetAsFrame(0)
             self.outPutFileDir = ""
         else:
-            self.geoScrapeFrame = Reader.pandas_read(inputFileLocation, self.sep)
+            self.geoScrapeFrame = Reader.pandas_read(ConfigVariables.FILELOCATION, self.sep)
             self.outPutFileDir = outPutFileDir
         self.resultsFrame = self.geoScrapeFrame
         self.notFilterHitWords = notFilterHitWords
