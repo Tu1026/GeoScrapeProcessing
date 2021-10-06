@@ -6,7 +6,7 @@ from config import ConfigVariables
 class Writer:
 
     @staticmethod
-    def writeGEOScrapeToCsvs(resultsFrame, origFrame, sep, outPutDir, gService):
+    def writeGEOScrapeToCsvs(resultsFrame, origFrame, sep, outPutDir, gService, notFilterHitWords):
         print(f"Outputing the file in your selected location at {outPutDir}")
         currTime = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
         nameForAllFrame = "Processed_GeoSrape_mainFrame" 
