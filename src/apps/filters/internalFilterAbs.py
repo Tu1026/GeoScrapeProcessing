@@ -80,9 +80,11 @@ class InternalFilter(ABC):
             return (f'(Success) {successReason}')
 
         else:
-            if self.filterTerms == "RNA":
+            if self.filterType == "RNA":
                 if 'array' in row['Type']:
                     return (f'(Success) {successReason}')
+                elif 'Non-coding' in row['Type']:
+                    return (f'(Failure) {faileReason}')
             for column in self.text_columns:
                 if not pd.isna(row[column]):
                     ## Failure if the term we don't want is in the text
