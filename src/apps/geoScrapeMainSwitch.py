@@ -10,7 +10,7 @@ class GeoScrapeMainSwitch:
         if ConfigVariables.GOOGLESERVICE:
             self.geoScrapeFrame = ConfigVariables.GOOGLESERVICE.getWorkSheetAsFrame(0)
         else:
-            self.geoScrapeFrame = Reader.pandas_read(ConfigVariables.FILELOCATION, self.sep)
+            self.geoScrapeFrame = Reader.pandas_read(ConfigVariables.FILELOCATION, ConfigVariables.SEP)
         self.resultsFrame = self.geoScrapeFrame
 
         ##Remove hitwords filter if user passed in -n

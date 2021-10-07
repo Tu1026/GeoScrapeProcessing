@@ -74,15 +74,17 @@ class InternalFilter(ABC):
         
         elif self.filterType == "sampleSize":
             for column in self.text_columns:
-                if not pd.isna(row[column]) or not row[column] == "":
+                if not pd.isna(row[column]) or not row[column] == '' or row[column] is not None:
                     if int(row[column]) <= terms:
                         return (f'(Failure) {faileReason}')
             return (f'(Success) {successReason}')
 
         else:
-            if self.filterTerms == "RNA":
+            if self.filterType == "RNA":
                 if 'array' in row['Type']:
                     return (f'(Success) {successReason}')
+                elif 'Non-coding' in row['Type']:
+                    return (f'(Failure) {faileReason}')
             for column in self.text_columns:
                 if not pd.isna(row[column]):
                     ## Failure if the term we don't want is in the text
@@ -90,5 +92,4 @@ class InternalFilter(ABC):
                         return (f'(Failure) {faileReason}')
             ## Sucess if the term we don't want doesn't appear
             return (f'(Success) {successReason}')
-    
     

@@ -28,11 +28,11 @@ class Writer:
             gService.createNewWorkSheetFromDf(nameForOnePlarformCuratableFrameArray, OutputSheetsFormatting.filterOnePlarformCuratableFrameArray(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForOnePlarformCuratableFrameRNA, OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForMultiPlarformCuratableFrameArray, OutputSheetsFormatting.filterMultiArrayPlarformCuratableFrame(origFrame, resultsFrame))
-            gService.createNewWorkSheetFromDf(nameForMultiPlarformCuratableFrameRNA, OutputSheetsFormatting.filterOnePlarformCuratableFrameRNASeq(origFrame, resultsFrame))
+            gService.createNewWorkSheetFromDf(nameForMultiPlarformCuratableFrameRNA, OutputSheetsFormatting.filterMultiRNASeqPlarformCuratableFrame(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForNonCuratedPlaform, OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForDoubleCheckFrame, OutputSheetsFormatting.doubleCheckFrame(origFrame, resultsFrame))
             if not ConfigVariables.NOHITTERM:
-                gService.createNewWorkSheetFromDf(nameForHitList, OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame))
+                gService.createNewWorkSheetFromDf(nameForHitList, OutputSheetsFormatting.groupByHitWordsFrame(origFrame, resultsFrame))
             gService.createNewWorkSheetFromDf(nameForAllFrame, resultsFrame)
             gService.createNewWorkSheetFromDf(nameForUnwantedFrame, OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame))
 
@@ -51,7 +51,7 @@ class Writer:
             OutputSheetsFormatting.nonCuratedPlatFormFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForNonCuratedPlaform}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.doubleCheckFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForDoubleCheckFrame}.{format}"), sep = sep, index=False)
             if not ConfigVariables.NOHITTERM:
-                OutputSheetsFormatting.groupByHitWordsFrame(resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
+                OutputSheetsFormatting.groupByHitWordsFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForHitList}.{format}"), sep = sep, index=False)
             resultsFrame.to_csv(os.path.join(outPutDir,f"{currTime}/{nameForAllFrame}.{format}"), sep = sep, index=False)
             OutputSheetsFormatting.unwantedFrame(origFrame, resultsFrame).to_csv(os.path.join(outPutDir,f"{currTime}/{nameForUnwantedFrame}.{format}"), sep = sep, index=False)
 

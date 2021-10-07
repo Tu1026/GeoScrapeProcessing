@@ -1,6 +1,6 @@
 from .internalFilterAbs import InternalFilter
-from config import Config, ConfigVariables
 from apps.readAndWriter import Reader
+from config import ConfigVariables
 
 class HitWordsFilter(InternalFilter):
     ## The reason why something is filtered out at this stage
@@ -18,3 +18,11 @@ class HitWordsFilter(InternalFilter):
     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api?
     def filterTerms(self, df):
         return super().filterTerms(df, self.regexTerms, self.failedReason, self.successReason)
+
+    def __eq__(self, o: object) -> bool:
+        if (isinstance(o, HitWordsFilter)):
+            return self.filterType == o.filterType and self.successReason == o.successReason and self.relevantFields == o.relevantFields and self.failedReason == o.failedReason
+
+    
+    def __hash__(self) -> int:
+        return hash(self.failedReason, self.successReason, self.filterType, self.relevantFields)
