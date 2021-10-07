@@ -1,6 +1,7 @@
 # Command line should be in format: terms.txt tsvofscrape
 import pandas as pd
 
+
 class Reader:
 
     @staticmethod
@@ -11,6 +12,7 @@ class Reader:
         # Pandas to open data frame of our listGEOData output
         df = pd.read_csv(file, sep=sep, index_col=False)
         return(df)
+
     @staticmethod
     def read_terms(file):
         """
