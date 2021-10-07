@@ -10,7 +10,7 @@ from apps.filters import HitWordsFilter
 # click options
 
 
-# Build Options
+# Build Options into a nicely formatted list
 def add_options(options):
     def _add_options(func):
         for option in reversed(options):
@@ -46,7 +46,8 @@ geoScrape_option = [
         '-s',
         '--sep',
         default="\t",
-        help="Delimiter you want to use for the input and output file"),
+        help="Delimiter you want to use for the input and output file"
+        "(Only use this with -f option"),
     click.option(
         '-h',
         '--hitWordsFile',
