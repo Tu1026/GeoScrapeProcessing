@@ -31,7 +31,8 @@ class GeoScrapeMainSwitch:
         Writer.writeGEOScrapeToCsvs(self.resultsFrame, self.geoScrapeFrame)
 
     def __initalizeFilters(self):
-        print("Creating Filters... Please make sure these are the filters you want to use")
+        print("Creating Filters... Please make sure these are"
+              " the filters you want to use")
         [print(str(filter)) for filter in self.listOfFilters]
         initializedFilters = [filter() for filter in self.listOfFilters]
         print("Filters initialized")
@@ -39,6 +40,7 @@ class GeoScrapeMainSwitch:
 
     def __runFilters(self):
         filters = self.__initalizeFilters()
-        print("Start running the file on all filters............................")
+        print("Start running the file on all "
+              "filters............................")
         for filter in filters:
             self.resultsFrame = filter.filterTerms(self.resultsFrame)
