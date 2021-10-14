@@ -1,5 +1,13 @@
 # Print iterations progress (from stackoverflow)
-def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
+def printProgressBar(
+        iteration,
+        total,
+        prefix='',
+        suffix='',
+        decimals=1,
+        length=100,
+        fill='█',
+        printEnd="\r"):
     """
     Call in a loop to create terminal progress bar
     @params:
@@ -12,16 +20,18 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
         fill        - Optional  : bar fill character (Str)
         printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
     """
-    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    percent = ("{0:." + str(decimals) + "f}").format(100 * \
+               (iteration / float(total)))
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
-    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
+    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end=printEnd)
     # Print New Line on Complete
-    if iteration == total: 
+    if iteration == total:
         print()
 
 # Helps format the time output into human readable form
+
+
 def formatTime(startTime, FinishedTime):
     import time
     return time.strftime("%H:%M:%S", time.gmtime(FinishedTime - startTime))
-    

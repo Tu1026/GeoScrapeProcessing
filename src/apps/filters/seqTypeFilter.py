@@ -1,6 +1,4 @@
-#### No longer used replaced by other simpler methods
-
-
+# No longer used replaced by other simpler methods
 
 
 # from .internalFilterAbs import InternalFilter
@@ -13,12 +11,11 @@
 #     regex_terms = "array"
 #     filterType = "Sequencing Type"
 #     relevantFields = ["Type"]
-    
+
 #     def __init__(self) -> None:
 #         super().__init__(self.filterType, self.relevantFields)
-    
+
 #     ### Filter by only using the outputs in Paul's listGEO -> Try out how many false negatives and we can try entrez api
 #     def filterTerms(self, df):
-#         return super().filterTerms(df, self.regex_terms, self.failedReason, self.successReason)
-
-    
+# return super().filterTerms(df, self.regex_terms, self.failedReason,
+# self.successReason)

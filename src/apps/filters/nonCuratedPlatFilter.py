@@ -1,15 +1,20 @@
+# This is a special filter. It does not share common methods with other
+# filter objects because it does not rely on data
+
 from .internalFilterAbs import InternalFilter
 
 
-class SampleSizeFilter(InternalFilter):
+class NonCuratedPlatFilter(InternalFilter):
     # The reason why something is filtered out at this stage
-    failedReason = "Sample Size too small"
+    failedReason = "Platform is not already curated and in GEMMA, "
+    "please double check and make sure this platform can be added"
     # Why experiemnt passed filter
-    successReason = "Sample Size fine"
+    successReason = "Platform(s) the experiment "
+    "uses is/are all in GEMMA already"
     # The regex terms for unwanted hit terms
-    regex_terms = 3
-    filterType = "sampleSize"
-    relevantFileds = ['NumSamples']
+    regex_terms = "FALSE"
+    filterType = "nonCuratedPlatofrms"
+    relevantFileds = ['AllPlatformsInGemma']
 
     def __init__(self) -> None:
         super().__init__(self.filterType, self.relevantFileds)
