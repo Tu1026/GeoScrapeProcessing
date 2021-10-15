@@ -35,7 +35,7 @@ class InternalFilter(ABC):
         df = df[df.iloc[:, 1] != '']
         print(
             "Please check if the below dataframe looks correct "
-            "before filtering by {self.filterType}")
+            f"before filtering by {self.filterType}")
         print("\n\n ========================================"
               "These are the first 5 rows =========================="
               "==============")
