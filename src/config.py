@@ -36,7 +36,7 @@ class Config:
 
     @staticmethod
     def _setThreads():
-        os.environ['OPENBLAS_NUM_THREADS'] = "1"
+        os.environ['OPENBLAS_NUM_THREADS'] = "32"
 
     @staticmethod
     def _setLoadFileLocation(fileLocation):
@@ -80,7 +80,7 @@ class Config:
 
     @staticmethod
     def getVersion():
-        return "1.1"
+        return "1.2"
 
     @staticmethod
     def getSoftwareName():
