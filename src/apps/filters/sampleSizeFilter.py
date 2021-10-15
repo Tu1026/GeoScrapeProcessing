@@ -7,7 +7,7 @@ class SampleSizeFilter(InternalFilter):
     # Why experiemnt passed filter
     successReason = "Sample Size fine"
     # The regex terms for unwanted hit terms
-    regex_terms = 3
+    regex_terms = 2
     filterType = "sampleSize"
     relevantFileds = ['NumSamples']
 
