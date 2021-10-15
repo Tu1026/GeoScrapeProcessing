@@ -2,6 +2,7 @@ import pandas as pd
 from datetime import datetime
 import os
 from config import ConfigVariables
+import swifter
 
 
 class Writer:
@@ -16,28 +17,19 @@ class Writer:
         currTime = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
         nameForAllFrame = "Processed_GeoSrape_mainFrame"
 
-        nameForOnePlarformCuratableFrameArray = "(1.Ready for loading Arrays)"
-        " Processed_GeoSrape_mainFrame"
+        nameForOnePlarformCuratableFrameArray = "(1.Ready for loading Arrays) Processed_GeoSrape_mainFrame"
 
-        nameForOnePlarformCuratableFrameRNA = "(2.Ready for loading RNA-seq) "
-        "Processed_GeoSrape_mainFrame"
+        nameForOnePlarformCuratableFrameRNA = "(2.Ready for loading RNA-seq) Processed_GeoSrape_mainFrame"
 
-        nameForMultiPlarformCuratableFrameArray = "(3. Check if you need to "
-        "split platforms Arrays) Processed_GeoSrape_mainFrame"
+        nameForMultiPlarformCuratableFrameArray = "(3. Check if you need to split platforms Arrays) Processed_GeoSrape_mainFrame"
 
-        nameForMultiPlarformCuratableFrameRNA = "(4. Check if you need to "
-        "split platforms RNA-seq) Processed_GeoSrape_mainFrame"
+        nameForMultiPlarformCuratableFrameRNA = "(4. Check if you need to split platforms RNA-seq) Processed_GeoSrape_mainFrame"
 
-        nameForNonCuratedPlaform = "(5. Check if all platforms can be "
-        "curated) Processed_GeoSrape_mainFrame"
-
-        nameForDoubleCheckFrame = "(6. Double check if these experiments are "
-        "indeed wrong RNA type) Double_Check_Frame"
+        nameForDoubleCheckFrame = "(6. Double check these experiments, check the 'action' status for more info) Double_Check_Frame"
 
         nameForHitList = "(Experiments grouped by hitWords)"
 
-        nameForUnwantedFrame = "(Disgarded Experiments) "
-        "Processed_GeoSrape_mainFrame"
+        nameForUnwantedFrame = "(Disgarded Experiments) Processed_GeoSrape_mainFrame"
 
         if gService:
             # [gService.createNewWorkSheetFromDf( for methodToWriteToGoogle in
@@ -61,11 +53,6 @@ class Writer:
             gService.createNewWorkSheetFromDf(
                 nameForMultiPlarformCuratableFrameRNA,
                 OutputSheetsFormatting.filterMultiRNASeqPlarformCuratableFrame(
-                    origFrame,
-                    resultsFrame))
-            gService.createNewWorkSheetFromDf(
-                nameForNonCuratedPlaform,
-                OutputSheetsFormatting.nonCuratedPlatFormFrame(
                     origFrame,
                     resultsFrame))
             gService.createNewWorkSheetFromDf(
@@ -126,14 +113,6 @@ class Writer:
                     outPutDir,
                     f"{currTime}/"
                     f"{nameForMultiPlarformCuratableFrameRNA}.{format}"),
-                sep=sep,
-                index=False)
-            OutputSheetsFormatting.nonCuratedPlatFormFrame(
-                origFrame,
-                resultsFrame).to_csv(
-                os.path.join(
-                    outPutDir,
-                    f"{currTime}/{nameForNonCuratedPlaform}.{format}"),
                 sep=sep,
                 index=False)
             OutputSheetsFormatting.doubleCheckFrame(
@@ -230,28 +209,34 @@ class OutputSheetsFormatting:
             hitWordsDict, orient="index").reset_index()
 
     @staticmethod
-    def nonCuratedPlatFormFrame(origDf, newDf):
-        print("Preparing non-curated platform experiments list")
-        columns = OutputSheetsFormatting.__getFilterResultColumns(
-            origDf, newDf)
-        for column in columns:
-            if column != "nonCuratedPlatofrms Filter Results":
-                newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
-            else:
-                newDf = newDf.loc[newDf[column].str.startswith("(Failure)")]
-        return newDf
-
-    @staticmethod
     def doubleCheckFrame(origDf, newDf):
-        print("Preparing a list that needs to be double checked for RNA type")
+        print("Preparing a list that needs to be double checked for RNA"
+              " type and platform curatability")
         columns = OutputSheetsFormatting.__getFilterResultColumns(
             origDf, newDf)
+        doubleCheckColumns = {"RNA Filter Results":
+                              "Check if the RNA type is what we don't support",
+                              "nonCuratedPlatforms Filter Results":
+                              ("Check if the platform can be curated in GEMMA"
+                               "Usually all Illumina are fine but "
+                               "Ion Torrent or AB ARE not")}
+        # Everything needs so succeed except RNA and platform filters
         for column in columns:
-            if (column == "RNA Filter Results"
-                    or column == "nonCuratedPlatofrms Filter Results"):
-                newDf = newDf.loc[~newDf[column].str.startswith("(Success)")]
+            if column in doubleCheckColumns.keys():
+                pass
             else:
                 newDf = newDf.loc[newDf[column].str.startswith("(Success)")]
+
+        def getActionForProblem(row):
+            result = []
+            for column, action in doubleCheckColumns.items():
+                if "(Failure)" in row[column]:
+                    result.append(action)
+            return ";".join(result)
+
+        newDf['Action'] = newDf.swifter.allow_dask_on_strings(
+            enable=True).apply(getActionForProblem, axis=1)
+        newDf = newDf.loc[~pd.isna(newDf['Action'])]
         return newDf
 
     @staticmethod
@@ -262,7 +247,7 @@ class OutputSheetsFormatting:
 
         def searchFails(row):
             for column in columns:
-                if (column == "nonCuratedPlatofrms Filter Results"
+                if (column == "nonCuratedPlatforms Filter Results"
                         or column == "RNA Filter Results"):
                     continue
                 else:
