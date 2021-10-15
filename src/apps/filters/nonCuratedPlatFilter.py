@@ -13,7 +13,7 @@ class NonCuratedPlatFilter(InternalFilter):
     "uses is/are all in GEMMA already"
     # The regex terms for unwanted hit terms
     regex_terms = "FALSE"
-    filterType = "nonCuratedPlatofrms"
+    filterType = "nonCuratedPlatforms"
     relevantFileds = ['AllPlatformsInGemma']
 
     def __init__(self) -> None:
