@@ -104,7 +104,7 @@ if __name__ == "__main__":
     print('\n')
     print(
         f'                                         {Config.getSoftwareName()}'
-        ' version: {Config.getVersion()} initiating')
+        f' version: {Config.getVersion()} initiating')
     print("=============================================================="
           "========================================"
           "===========================")
