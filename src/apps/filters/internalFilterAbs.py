@@ -6,6 +6,8 @@ from apps.misc import formatTime
 from tqdm import tqdm
 from abc import ABC, abstractmethod
 import swifter
+import dask.dataframe as dd
+import multiprocessing
 
 
 class InternalFilter(ABC):
@@ -54,14 +56,13 @@ class InternalFilter(ABC):
         df = self.extractTextColumn(df)
         start = time.time()
         if self.filterType == "hitWords":
-            df["hitList"] = df.swifter.allow_dask_on_strings(
-                enable=True).apply(
+            df["hitList"] = dd.from_pandas(df, npartitions=2*multiprocessing.cpu_count()).map_partitions(lambda df: df.apply(
                 lambda row: self._filterTerms(
                     row,
                     terms,
                     failedReason,
                     successReason),
-                axis=1)
+                axis=1)).compute(scheduler="processes")
             df[self.resultColumn] = df["hitList"
                                        ].swifter.allow_dask_on_strings(
                 enable=True).apply(
@@ -108,7 +109,7 @@ class InternalFilter(ABC):
                 if 'array' in row['Type']:
                     return (f'(Success) {successReason}')
                 elif 'Non-coding' in row['Type']:
-                    return (f'(Failure) {faileReason}')
+                    return (f'(Failure) {faileReason} using non-coding')
             for column in self.text_columns:
                 if not pd.isna(row[column]):
                     # Failure if the term we don't want is in the text
