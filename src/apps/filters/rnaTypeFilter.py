@@ -7,8 +7,8 @@ class RNATypeFilter(InternalFilter):
     # Why experiemnt passed filter
     successReason = "Supported RNA type"
     # The regex terms for unwanted hit terms
-    regex_terms = "scRNA|single.cell.RNA|locRNA|"
-    "lon.non.coding.rna|mirna|microRNA|non-coding"
+    regex_terms = "scRNA|single.cell|locRNA|"
+    "long.non.coding|mirna|microRNA|non-coding|srna"
     filterType = "RNA"
     relevantFileds = ['Title', 'Summary', 'MeSH', 'SampleTerms']
 
