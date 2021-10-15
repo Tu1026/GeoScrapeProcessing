@@ -17,6 +17,7 @@ gspread = "*"
 gspread-dataframe = "*"
 pytest = "*"
 pytest-dependency = "*"
+dask = "*"
 
 [dev-packages]
 pylint = "*"
