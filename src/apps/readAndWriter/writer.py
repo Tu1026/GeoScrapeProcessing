@@ -25,7 +25,7 @@ class Writer:
 
         nameForMultiPlarformCuratableFrameRNA = "(4. Check if you need to split platforms RNA-seq) Processed_GeoSrape_mainFrame"
 
-        nameForDoubleCheckFrame = "(6. Double check these experiments, check the 'action' status for more info) Double_Check_Frame"
+        nameForDoubleCheckFrame = "(5. Double check these experiments, check the 'action' status for more info) Double_Check_Frame"
 
         nameForHitList = "(Experiments grouped by hitWords)"
 
@@ -236,7 +236,8 @@ class OutputSheetsFormatting:
 
         newDf['Action'] = newDf.swifter.allow_dask_on_strings(
             enable=True).apply(getActionForProblem, axis=1)
-        newDf = newDf.loc[~pd.isna(newDf['Action'])]
+        newDf = newDf.loc[~(pd.isna(newDf['Action']) | (newDf['Action'] == ""))]
+
         return newDf
 
     @staticmethod
