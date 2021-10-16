@@ -104,12 +104,22 @@ class InternalFilter(ABC):
                         return (f'(Failure) {faileReason}')
             return (f'(Success) {successReason}')
 
+        elif self.filterType == "RNA":
+            badRNAList = []
+            if 'array' in row['Type']:
+                return (f'(Success) {successReason}')
+            elif 'Non-coding' in row['Type']:
+                return (f'(Failure) {faileReason} using non-coding')
+            else:
+                for column in self.text_columns:
+                    if not pd.isna(row[column]):
+                        for term in terms:
+                            if re.search(term, str(row[column]),
+                                         re.IGNORECASE):
+                                badRNAList.append(term)
+                return (f'(Success) {successReason}' if not badRNAList
+                        else f'(Failure) {faileReason}')
         else:
-            if self.filterType == "RNA":
-                if 'array' in row['Type']:
-                    return (f'(Success) {successReason}')
-                elif 'Non-coding' in row['Type']:
-                    return (f'(Failure) {faileReason} using non-coding')
             for column in self.text_columns:
                 if not pd.isna(row[column]):
                     # Failure if the term we don't want is in the text
