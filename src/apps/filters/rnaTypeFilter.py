@@ -6,9 +6,10 @@ class RNATypeFilter(InternalFilter):
     failedReason = "Given Experiment does not use an RNA techonology supported"
     # Why experiemnt passed filter
     successReason = "Supported RNA type"
-    # The regex terms for unwanted hit terms
-    regex_terms = "scRNA|single.cell|locRNA|"
-    "long.non.coding|mirna|microRNA|non-coding|srna"
+    # The regex terms for unwanted RNA types add here if you encounter more 
+    regex_terms = ["scRNA", "single.cell", "locRNA",
+                   "long.non.coding", "mirna", "microRNA",
+                   "non-coding", "srna", "snRNA", "small.nuclear"]
     filterType = "RNA"
     relevantFileds = ['Title', 'Summary', 'MeSH', 'SampleTerms']
 
