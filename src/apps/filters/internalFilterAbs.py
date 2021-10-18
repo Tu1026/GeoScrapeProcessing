@@ -109,7 +109,7 @@ class InternalFilter(ABC):
             if 'array' in row['Type']:
                 return (f'(Success) {successReason}')
             elif 'Non-coding' in row['Type']:
-                return (f'(Failure) {faileReason} using non-coding')
+                return (f'(Failure) {faileReason} : using non-coding')
             else:
                 for column in self.text_columns:
                     if not pd.isna(row[column]):
@@ -118,7 +118,8 @@ class InternalFilter(ABC):
                                          re.IGNORECASE):
                                 badRNAList.append(term)
                 return (f'(Success) {successReason}' if not badRNAList
-                        else f'(Failure) {faileReason}')
+                        else f'(Failure) {faileReason} :' +
+                        ";".join(badRNAList))
         else:
             for column in self.text_columns:
                 if not pd.isna(row[column]):
