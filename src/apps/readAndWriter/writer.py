@@ -35,6 +35,7 @@ class Writer:
             # [gService.createNewWorkSheetFromDf( for methodToWriteToGoogle in
             # dir(OutputSheetsFormatting) if not
             # methodToWriteToGoogle.startswith("__")]
+            gService.createNewWorkSheetFromDf(nameForAllFrame, resultsFrame)
             gService.createNewWorkSheetFromDf(
                 nameForOnePlarformCuratableFrameArray,
                 OutputSheetsFormatting.filterOnePlarformCuratableFrameArray(
@@ -65,7 +66,6 @@ class Writer:
                     nameForHitList,
                     OutputSheetsFormatting.groupByHitWordsFrame(
                         origFrame, resultsFrame))
-            gService.createNewWorkSheetFromDf(nameForAllFrame, resultsFrame)
             gService.createNewWorkSheetFromDf(
                 nameForUnwantedFrame,
                 OutputSheetsFormatting.unwantedFrame(
@@ -173,7 +173,7 @@ class OutputSheetsFormatting:
 
     @staticmethod
     def filterMultiArrayPlarformCuratableFrame(origDf, newDf):
-        print("Preparing multiplatform curatable list")
+        print("Preparing multiplatform array curatable list")
         columns = OutputSheetsFormatting.__getFilterResultColumns(
             origDf, newDf)
         for column in columns:
@@ -184,7 +184,7 @@ class OutputSheetsFormatting:
 
     @staticmethod
     def filterMultiRNASeqPlarformCuratableFrame(origDf, newDf):
-        print("Preparing multiplatform curatable list")
+        print("Preparing multiplatform RNA-seq curatable list")
         columns = OutputSheetsFormatting.__getFilterResultColumns(
             origDf, newDf)
         for column in columns:
@@ -217,7 +217,7 @@ class OutputSheetsFormatting:
         doubleCheckColumns = {"RNA Filter Results":
                               "Check if the RNA type is what we don't support",
                               "nonCuratedPlatforms Filter Results":
-                              ("Check if the platform can be curated in GEMMA"
+                              ("Check if the platform can be curated in GEMMA "
                                "Usually all Illumina are fine but "
                                "Ion Torrent or AB ARE not")}
         # Everything needs so succeed except RNA and platform filters
@@ -231,6 +231,8 @@ class OutputSheetsFormatting:
             result = []
             for column, action in doubleCheckColumns.items():
                 if "(Failure)" in row[column]:
+                    if column == "RNA Filter Results":
+                        action = action + row[column].split(":")[1]
                     result.append(action)
             return ";".join(result)
 
