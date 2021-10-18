@@ -35,7 +35,6 @@ class Writer:
             # [gService.createNewWorkSheetFromDf( for methodToWriteToGoogle in
             # dir(OutputSheetsFormatting) if not
             # methodToWriteToGoogle.startswith("__")]
-            gService.createNewWorkSheetFromDf(nameForAllFrame, resultsFrame)
             gService.createNewWorkSheetFromDf(
                 nameForOnePlarformCuratableFrameArray,
                 OutputSheetsFormatting.filterOnePlarformCuratableFrameArray(
@@ -66,6 +65,7 @@ class Writer:
                     nameForHitList,
                     OutputSheetsFormatting.groupByHitWordsFrame(
                         origFrame, resultsFrame))
+            gService.createNewWorkSheetFromDf(nameForAllFrame, resultsFrame)
             gService.createNewWorkSheetFromDf(
                 nameForUnwantedFrame,
                 OutputSheetsFormatting.unwantedFrame(
@@ -215,7 +215,7 @@ class OutputSheetsFormatting:
         columns = OutputSheetsFormatting.__getFilterResultColumns(
             origDf, newDf)
         doubleCheckColumns = {"RNA Filter Results":
-                              "Check if the RNA type is what we don't support",
+                              "Check if the RNA type is what we don't support ",
                               "nonCuratedPlatforms Filter Results":
                               ("Check if the platform can be curated in GEMMA "
                                "Usually all Illumina are fine but "
