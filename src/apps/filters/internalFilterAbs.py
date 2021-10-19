@@ -81,7 +81,7 @@ class InternalFilter(ABC):
         print(df.head())
         return df
 
-    # Private implementation of filterTerms
+    # Private implementation of filterTerms controls for special cases
 
     def _filterTerms(self, row, terms, faileReason, successReason):
         if self.filterType == "hitWords":
@@ -120,6 +120,17 @@ class InternalFilter(ABC):
                 return (f'(Success) {successReason}' if not badRNAList
                         else f'(Failure) {faileReason} :' +
                         ";".join(badRNAList))
+
+        elif self.filterType == "Taxa":
+            allTaxa = ""
+            for column in self.text_columns:
+                allTaxa += row[column]
+            allTaxa = allTaxa.split(",")
+            for taxon in allTaxa:
+                if taxon not in terms:
+                    return f'(Failure) {faileReason}'
+            return f'(Success) {successReason}'
+
         else:
             for column in self.text_columns:
                 if not pd.isna(row[column]):

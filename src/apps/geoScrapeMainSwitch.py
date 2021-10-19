@@ -1,5 +1,5 @@
 from apps.filters import (HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter,
-                          SuperSeriesFilter, SampleSizeFilter)
+                          SuperSeriesFilter, SampleSizeFilter, TaxaFilter)
 from apps.readAndWriter import Reader, Writer
 from config import ConfigVariables
 
@@ -10,7 +10,8 @@ class GeoScrapeMainSwitch:
         NonCuratedPlatFilter,
         RNATypeFilter,
         SuperSeriesFilter,
-        SampleSizeFilter}
+        SampleSizeFilter,
+        TaxaFilter}
 
     def __init__(self) -> None:
         # initiaitng the frame that we will be working with
