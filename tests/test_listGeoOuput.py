@@ -81,6 +81,15 @@ def test_superSeriesFilter_compat(list_GEO_output):
         pytest.fail(f'Failed because generic {e} invesitgate why')
 
 
+def test_taxonFilter_compat(list_GEO_output):
+    try:
+        list_GEO_output['Taxa']
+    except KeyError:
+        pytest.fail('Failed because needed column not here')
+    except Exception as e:
+        pytest.fail(f'Failed because generic {e} invesitgate why')
+
+
 def test_writerColumn_compat(list_GEO_output):
     try:
         list_GEO_output['Platforms']
