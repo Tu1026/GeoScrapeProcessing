@@ -29,7 +29,7 @@ class Writer:
 
         nameForHitList = "(Experiments grouped by hitWords)"
 
-        nameForUnwantedFrame = "(Disgarded Experiments) Processed_GeoSrape_mainFrame"
+        nameForUnwantedFrame = "(Discarded Experiments) Processed_GeoSrape_mainFrame"
 
         if gService:
             # [gService.createNewWorkSheetFromDf( for methodToWriteToGoogle in
