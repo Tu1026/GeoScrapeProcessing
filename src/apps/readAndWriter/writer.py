@@ -205,6 +205,9 @@ class OutputSheetsFormatting:
             if row.hitList:
                 for hit in row.hitList:
                     hitWordsDict[hit].append(row.Acc)
+        for key, val in hitWordsDict.items():
+            hitWordsDict[key] = ";".join(val)
+        print(hitWordsDict)
         return pd.DataFrame.from_dict(
             hitWordsDict, orient="index").reset_index()
 
