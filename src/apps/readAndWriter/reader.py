@@ -28,8 +28,7 @@ class Reader:
     def read_combination_of_terms(files):
         listOfListOfTerms = []
         for file in files:
-            Reader.read_terms(file)
-            listOfListOfTerms.extend(file)
+            listOfListOfTerms.append(Reader.read_terms(file))
         listOfListOfTerms = list(itertools.product(*listOfListOfTerms))
         listOfTerms = []
         for tp in listOfListOfTerms:
