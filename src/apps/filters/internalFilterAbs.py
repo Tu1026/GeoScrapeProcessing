@@ -50,7 +50,6 @@ class InternalFilter(ABC):
         return df
 
 
-    #@TODO Optimize the speed
     @abstractmethod
     # Filter by only using the outputs in Paul's listGEO -> Try out how many
     # false negatives and we can try entrez api?
@@ -96,7 +95,7 @@ class InternalFilter(ABC):
                     tempListOfWords = tempListOfWords + row[column]
             for term in terms:
                 # Sucess if a term is present in the text
-                if re.search(term, tempListOfWords, re.IGNORECASE):
+                if re.search(r'\b' + term, tempListOfWords, re.IGNORECASE):
                     hitLists.add(term)
             return list(hitLists)
 
