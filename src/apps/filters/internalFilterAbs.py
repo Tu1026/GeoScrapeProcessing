@@ -8,6 +8,7 @@ from abc import ABC, abstractmethod
 import swifter
 import dask.dataframe as dd
 import multiprocessing
+from dask.diagnostics import ProgressBar
 
 
 class InternalFilter(ABC):
@@ -48,6 +49,7 @@ class InternalFilter(ABC):
         print(df.tail())
         return df
 
+
     @abstractmethod
     # Filter by only using the outputs in Paul's listGEO -> Try out how many
     # false negatives and we can try entrez api?
@@ -56,13 +58,14 @@ class InternalFilter(ABC):
         df = self.extractTextColumn(df)
         start = time.time()
         if self.filterType == "hitWords":
-            df["hitList"] = dd.from_pandas(df, npartitions=2*multiprocessing.cpu_count()).map_partitions(lambda df: df.apply(
-                lambda row: self._filterTerms(
-                    row,
-                    terms,
-                    failedReason,
-                    successReason),
-                axis=1)).compute(scheduler="processes")
+            with ProgressBar():
+                df["hitList"] = dd.from_pandas(df, npartitions=2*multiprocessing.cpu_count()).map_partitions(lambda df: df.apply(
+                    lambda row: self._filterTerms(
+                        row,
+                        terms,
+                        failedReason,
+                        successReason),
+                    axis=1)).compute(scheduler="processes")
             df[self.resultColumn] = df["hitList"
                                        ].swifter.allow_dask_on_strings(
                 enable=True).apply(
@@ -92,7 +95,7 @@ class InternalFilter(ABC):
                     tempListOfWords = tempListOfWords + row[column]
             for term in terms:
                 # Sucess if a term is present in the text
-                if re.search("\\b" + term, tempListOfWords, re.IGNORECASE):
+                if re.search(r'\b' + term, tempListOfWords, re.IGNORECASE):
                     hitLists.add(term)
             return list(hitLists)
 

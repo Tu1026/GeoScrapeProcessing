@@ -5,3 +5,4 @@ from .superSeriesFilter import SuperSeriesFilter
 from .rnaTypeFilter import RNATypeFilter
 from .nonCuratedPlatFilter import NonCuratedPlatFilter
 from .sampleSizeFilter import SampleSizeFilter
+from .taxaFilter import TaxaFilter
