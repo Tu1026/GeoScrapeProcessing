@@ -1,3 +1,4 @@
+import itertools
 import pandas as pd
 from datetime import datetime
 import os
@@ -198,23 +199,28 @@ class OutputSheetsFormatting:
     def groupByHitWordsFrame(_, newDf):
         print("Preparing the list that Alex "
               "wants (group experiments by hit words)")
-        hitWordsDictInd = {}
+        hitWordsDict = {}
 
         for hitFile in ConfigVariables.HITTERMSFILES:
             for word in Reader.read_terms(hitFile):
-                hitWordsDictInd[word] = []
+                hitWordsDict[word] = []
         for combTerm in Reader.read_combination_of_terms(ConfigVariables.HITTERMSFILES):
-            hitWordsDictInd[combTerm] = []
+            hitWordsDict[combTerm] = []
 
         for row in newDf.itertuples():
             if row.hitList:
                 for hit in row.hitList:
-                    hitWordsDictInd[hit].append(row.Acc)
-        for key, val in hitWordsDictInd.items():
-            hitWordsDictInd[key] = ";".join(val)
-        print(hitWordsDictInd)
+                    hitWordsDict[hit].append(row.Acc)
+                # Check if a valid combination exists
+                combinationKeys = ["+".join(keys) for keys in itertools.combinations(row.hitList, 2)]
+                for combKey in combinationKeys:
+                    if combKey in hitWordsDict:
+                        hitWordsDict[combKey].append(row.Acc)
+                        
+        for key, val in hitWordsDict.items():
+            hitWordsDict[key] = ";".join(val)
         return pd.DataFrame.from_dict(
-            hitWordsDictInd, orient="index").reset_index()
+            hitWordsDict, orient="index").reset_index()
 
     @staticmethod
     def doubleCheckFrame(origDf, newDf):
