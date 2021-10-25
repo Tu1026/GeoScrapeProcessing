@@ -10,7 +10,8 @@ class HitWordsFilter(InternalFilter):
     successReason = "Experiment matches the key words given"
     # The regex terms for unwanted hit terms
     filterType = "hitWords"
-    relevantFields = ['Title', 'Summary', 'MeSH', 'SampleTerms']
+    relevantFields = ['Title', 'Summary', 'MeSH', 'SampleTerms',
+                      'Overall Design']
 
     def __init__(self) -> None:
         self.regexTerms = []
