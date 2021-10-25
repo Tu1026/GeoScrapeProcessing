@@ -53,7 +53,8 @@ geoScrape_option = [
         '--hitWordsFile',
         default="",
         help="Location of the hitTerms file."
-        " Default at docs/input_files/terms.txt"),
+        "Default at docs/input_files/terms.txt. Can take comma-delimited files "
+        "Where the program will hit a permutation of all terms in all files"),
     click.option(
         '-g',
         '--google',
@@ -65,7 +66,8 @@ geoScrape_option = [
         '-n',
         '--noTerm',
         is_flag=True,
-        help="Use this flag to filter experiments without using terms")]
+        help="Use this flag to filter experiments without using terms")
+        ]
 
 
 @click.group()
