@@ -3,6 +3,7 @@ from datetime import datetime
 import os
 from config import ConfigVariables
 import swifter
+from apps.readAndWriter.reader import Reader
 
 
 class Writer:
@@ -197,19 +198,23 @@ class OutputSheetsFormatting:
     def groupByHitWordsFrame(_, newDf):
         print("Preparing the list that Alex "
               "wants (group experiments by hit words)")
-        hitWordsDict = {}
-        with open(ConfigVariables.HITTERMSFILE, "r") as f:
-            for line in f:
-                hitWordsDict[line.strip()] = []
+        hitWordsDictInd = {}
+
+        for hitFile in ConfigVariables.HITTERMSFILES:
+            for word in Reader.read_terms(hitFile):
+                hitWordsDictInd[word] = []
+        for combTerm in Reader.read_combination_of_terms(ConfigVariables.HITTERMSFILES):
+            hitWordsDictInd[combTerm] = []
+
         for row in newDf.itertuples():
             if row.hitList:
                 for hit in row.hitList:
-                    hitWordsDict[hit].append(row.Acc)
-        for key, val in hitWordsDict.items():
-            hitWordsDict[key] = ";".join(val)
-        print(hitWordsDict)
+                    hitWordsDictInd[hit].append(row.Acc)
+        for key, val in hitWordsDictInd.items():
+            hitWordsDictInd[key] = ";".join(val)
+        print(hitWordsDictInd)
         return pd.DataFrame.from_dict(
-            hitWordsDict, orient="index").reset_index()
+            hitWordsDictInd, orient="index").reset_index()
 
     @staticmethod
     def doubleCheckFrame(origDf, newDf):
