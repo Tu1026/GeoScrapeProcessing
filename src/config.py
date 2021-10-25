@@ -80,7 +80,7 @@ class Config:
 
     @staticmethod
     def getVersion():
-        return "1.2"
+        return "1.3"
 
     @staticmethod
     def getSoftwareName():
