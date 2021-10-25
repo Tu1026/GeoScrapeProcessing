@@ -1,5 +1,6 @@
 # Command line should be in format: terms.txt tsvofscrape
 import pandas as pd
+import itertools
 
 
 class Reader:
@@ -20,4 +21,17 @@ class Reader:
         """
         with open(file, "r") as f:
             my_terms = f.read().splitlines()
-            return(my_terms)
+            my_terms = filter(None, my_terms)
+            return list(my_terms)
+
+    @staticmethod
+    def read_combination_of_terms(files):
+        listOfListOfTerms = []
+        for file in files:
+            Reader.read_terms(file)
+            listOfListOfTerms.extend(file)
+        listOfListOfTerms = list(itertools.product(*listOfListOfTerms))
+        listOfTerms = []
+        for tp in listOfListOfTerms:
+            listOfTerms.append("+".join(tp))
+        return listOfTerms
