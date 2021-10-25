@@ -13,11 +13,10 @@ class HitWordsFilter(InternalFilter):
     relevantFields = ['Title', 'Summary', 'MeSH', 'SampleTerms']
 
     def __init__(self) -> None:
-        iniTerm = [""]
+        self.regexTerms = []
         for f in ConfigVariables.HITTERMSFILES:
             terms = Reader.read_terms(f)
-            iniTerm = [term1 + (r".*\b" + term2) for term1 in iniTerm for term2 in terms]
-        self.regexTerms = iniTerm
+            self.regexTerms.extend(terms)
         # self.regexTerms = Reader.read_terms(ConfigVariables.HITTERMSFILE[0])
         super().__init__(self.filterType, self.relevantFields)
 
