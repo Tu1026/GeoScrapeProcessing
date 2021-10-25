@@ -13,7 +13,11 @@ class HitWordsFilter(InternalFilter):
     relevantFields = ['Title', 'Summary', 'MeSH', 'SampleTerms']
 
     def __init__(self) -> None:
-        self.regexTerms = Reader.read_terms(ConfigVariables.HITTERMSFILE)
+        self.regexTerms = []
+        for f in ConfigVariables.HITTERMSFILES:
+            terms = Reader.read_terms(f)
+            self.regexTerms.extend(terms)
+        # self.regexTerms = Reader.read_terms(ConfigVariables.HITTERMSFILE[0])
         super().__init__(self.filterType, self.relevantFields)
 
     # Filter by only using the outputs in Paul's listGEO -> Try out how many

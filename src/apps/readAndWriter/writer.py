@@ -1,8 +1,10 @@
+import itertools
 import pandas as pd
 from datetime import datetime
 import os
 from config import ConfigVariables
 import swifter
+from apps.readAndWriter.reader import Reader
 
 
 class Writer:
@@ -198,13 +200,25 @@ class OutputSheetsFormatting:
         print("Preparing the list that Alex "
               "wants (group experiments by hit words)")
         hitWordsDict = {}
-        with open(ConfigVariables.HITTERMSFILE, "r") as f:
-            for line in f:
-                hitWordsDict[line.strip()] = []
+
+        for hitFile in ConfigVariables.HITTERMSFILES:
+            for word in Reader.read_terms(hitFile):
+                hitWordsDict[word] = []
+        for combTerm in Reader.read_combination_of_terms(ConfigVariables.HITTERMSFILES):
+            hitWordsDict[combTerm] = []
+
         for row in newDf.itertuples():
             if row.hitList:
                 for hit in row.hitList:
                     hitWordsDict[hit].append(row.Acc)
+                # Check if a valid combination exists
+                combinationKeys = ["+".join(keys) for keys in itertools.combinations(row.hitList, 2)]
+                for combKey in combinationKeys:
+                    if combKey in hitWordsDict:
+                        hitWordsDict[combKey].append(row.Acc)
+                        
+        for key, val in hitWordsDict.items():
+            hitWordsDict[key] = ";".join(val)
         return pd.DataFrame.from_dict(
             hitWordsDict, orient="index").reset_index()
 

@@ -21,10 +21,10 @@ class Config:
     @staticmethod
     def _setHitTermsFile(customPath):
         if customPath:
-            ConfigVariables.HITTERMSFILE = customPath
+            ConfigVariables.HITTERMSFILES = customPath.split(",")
         else:
-            ConfigVariables.HITTERMSFILE = os.path.join(
-                ConfigVariables.PROJECTROOTDIR, "docs/input_files/terms.txt")
+            ConfigVariables.HITTERMSFILES = [os.path.join(
+                ConfigVariables.PROJECTROOTDIR, "docs/input_files/terms.txt")]
 
     @staticmethod
     def _setOutPutDir(customPath):
@@ -89,7 +89,7 @@ class Config:
 
 class ConfigVariables():
     PROJECTROOTDIR = Path(__file__).parent.parent
-    HITTERMSFILE = None
+    HITTERMSFILES = None
     OUTPUTDIR = None
     FILELOCATION = None
     SEP = None
