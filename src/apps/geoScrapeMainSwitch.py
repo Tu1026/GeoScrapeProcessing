@@ -2,6 +2,10 @@ from apps.filters import (HitWordsFilter, NonCuratedPlatFilter, RNATypeFilter,
                           SuperSeriesFilter, SampleSizeFilter, TaxaFilter)
 from apps.readAndWriter import Reader, Writer
 from config import ConfigVariables
+from apps.services import GeoService
+import dask.dataframe as dd
+import multiprocessing
+from dask.diagnostics import ProgressBar
 
 
 class GeoScrapeMainSwitch:
@@ -12,6 +16,7 @@ class GeoScrapeMainSwitch:
         SuperSeriesFilter,
         SampleSizeFilter,
         TaxaFilter}
+    columnsToGetFromExternal = ["Overall Design"]
 
     def __init__(self) -> None:
         # initiaitng the frame that we will be working with
@@ -21,6 +26,7 @@ class GeoScrapeMainSwitch:
         else:
             self.geoScrapeFrame = Reader.pandas_read(
                 ConfigVariables.FILELOCATION, ConfigVariables.SEP)
+        self.__populateColumnsWithExternalData()
         self.resultsFrame = self.geoScrapeFrame
 
         # Remove hitwords filter if user passed in -n
@@ -45,3 +51,17 @@ class GeoScrapeMainSwitch:
               "filters............................")
         for filter in filters:
             self.resultsFrame = filter.filterTerms(self.resultsFrame)
+
+    def __populateColumnsWithExternalData(self):
+        for field in self.columnsToGetFromExternal:
+            self.geoScrapeFrame[field] \
+                = dd.from_pandas(self.geoScrapeFrame, npartitions=2*multiprocessing.cpu_count()
+                                 ).map_partitions(lambda df:
+                                                  df.apply(lambda row:
+                                                            self.__getDataFromGEOService(row, field), axis=1))\
+                                                                .compute(scheduler="threads")
+
+    def __getDataFromGEOService(self, row, field):
+        geoSer = GeoService(row['Acc'])
+        if field == "Overall Design":
+            return geoSer.getOverAllDesign()
