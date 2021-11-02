@@ -9,9 +9,10 @@ class RNATypeFilter(InternalFilter):
     # The regex terms for unwanted RNA types add here if you encounter more 
     regex_terms = ["scRNA", "single.cell", "locRNA",
                    "long.non.coding", "mirna", 
-                   "non-coding", "srna", "snRNA", "small.nuclear"]
+                   "non-coding", "srna", "snRNA", "small.nuclear",
+                   "rip", "rip-seq"]
     filterType = "RNA"
-    relevantFileds = ['Title', 'Summary', 'MeSH', 'SampleTerms']
+    relevantFileds = ['Title', 'Summary', 'MeSH', 'SampleTerms', 'Overall Desgin']
 
     def __init__(self) -> None:
         super().__init__(self.filterType, self.relevantFileds)
